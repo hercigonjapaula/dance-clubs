@@ -1,0 +1,65 @@
+﻿@model DanceClubs.Models.ClubInput
+
+<form asp-controller="ClubController" asp-action="AddNewClub" method="post">
+    <div class="container">
+        <div class="row mt-3">
+            <div class="col-md-10 ml-auto mr-auto">
+                <div class="card" style="background-color:rebeccapurple;color:white">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md">
+                                <h4>Novi klub</h4>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md">
+                                <div>
+                                    <div class="form-group card-column">
+                                        <div class="form-group">
+                                            <label asp-for="Name" class="col-md-12 col-form-label"></label>
+                                            <div class="input-group col-xs-12">
+                                                <div class="col-md-12">
+                                                    <textarea asp-for="Name" cols="40" rows="1" class="form-control"></textarea>
+                                                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label asp-for="Address" class="col-md-12 col-form-label"></label>
+                                            <div class="input-group col-xs-12">
+                                                <div class="col-md-12">
+                                                    <textarea asp-for="Address" cols="40" rows="1" class="form-control"></textarea>
+                                                    @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label asp-for="OwnersEmails" class="col-md-12 col-form-label"></label>
+                                            <div class="input-group col-xs-12">
+                                                <div class="col-md-12">
+                                                    <textarea asp-for="OwnersEmails" cols="40" rows="5" class="form-control"></textarea>
+                                                    @Html.ValidationMessageFor(m => m.OwnersEmails, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group row" style="float:right">
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary" style="background-color:mediumpurple;border-color:mediumpurple">Dodaj</button> 
+                                            <a class="btn btn-primary" style="background-color:mediumpurple;border-color:mediumpurple" href="/Club">Odustani</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

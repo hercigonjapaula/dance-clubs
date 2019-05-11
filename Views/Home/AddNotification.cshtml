@@ -1,0 +1,44 @@
+﻿@model DanceClubs.Models.NotificationInput
+
+<form asp-controller="HomeController" asp-action="Index" method="get">
+    <div class="container">
+        <div class="row mt-3">
+            <div class="col-md-10 ml-auto mr-auto">
+                <div class="card" style="background-color:rebeccapurple;color:white">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md">
+                                <h4>Nova obavijest</h4>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md">
+                                <div>
+                                    <div class="form-group card-column">
+                                        <div class="form-group">
+                                            <label asp-for="Content" class="col-md-12 col-form-label"></label>
+                                            <div class="input-group col-xs-12">
+                                                <div class="col-md-12">
+                                                    <textarea asp-for="Content" cols="40" rows="10" class="form-control"></textarea>
+                                                    @Html.ValidationMessageFor(m => m.Content, "", new { @class = "text-danger" })
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row" style="float:right">
+                                        <div class="col-md-12">
+                                            <button type="submit" class="btn btn-primary" style="background-color:mediumpurple;border-color:mediumpurple">Objavi</button>
+                                            <a class="btn btn-primary" style="background-color:mediumpurple;border-color:mediumpurple" href="/">Odustani</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

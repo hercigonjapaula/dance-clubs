@@ -10,6 +10,18 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Services\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\DanceClubs.Data\DanceClubs.Data.csproj" />
+    <ProjectReference Include="..\DanceClubs.Service\DanceClubs.Service.csproj" />
   </ItemGroup>
 
 </Project>

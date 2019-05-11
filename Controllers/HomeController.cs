@@ -15,7 +15,7 @@ namespace DanceClubs.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult AddNotification()
         {
             return View();
         }
