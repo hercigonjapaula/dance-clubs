@@ -1,16 +1,12 @@
 ﻿@model DanceClubs.Models.ClubIndexModel
 
-
-<h1>Plesni klubovi</h1>
 <div style="float:right; padding:15px">
-    <form asp-controller="Club" asp-action="AddNewClub" method="get">
-        <a class="btn btn-primary btn-md" href="/Club/AddNewClub" style="background-color:mediumpurple;border-color:mediumpurple">Dodaj klub</a>
-    </form>
+    <a class="btn btn-primary" href="/ClubUsers/Create">Dodaj člana kluba</a>
 </div>
 <table class="table table-hover" id="clubIndexTable">
     <tbody style="background-color:white">
         @foreach (var club in Model.ClubList)
-        {
+        {            
             <tr id=@club.Id>
                 <td>
                     <center>@club.Name</center>
@@ -19,4 +15,3 @@
         }
     </tbody>
 </table>
-

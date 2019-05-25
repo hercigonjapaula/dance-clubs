@@ -10,6 +10,9 @@ using Microsoft.Extensions.DependencyInjection;
 using DanceClubs.Data;
 using DanceClubs.Service;
 using DanceClubs.Data.Models;
+using NETCore.MailKit.Extensions;
+using NETCore.MailKit.Infrastructure.Internal;
+using System;
 
 namespace DanceClubs
 {
@@ -42,12 +45,32 @@ namespace DanceClubs
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<ApplicationUser>()
+                .AddRoles<ApplicationRole>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();            
 
             services.AddScoped<IRepository, Repository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddMailKit(optionBuilder =>
+            {
+                var x = new MailKitOptions()
+                {
+                    //get options from sercets.json
+                    Server = Configuration["Server"],
+                    Port = Convert.ToInt32(Configuration["Port"]),
+                    SenderName = Configuration["SenderName"],
+                    SenderEmail = Configuration["SenderEmail"],
+
+                    // can be optional with no authentication 
+                    Account = Configuration["Account"],
+                    Password = Configuration["Password"],
+                    // enable ssl or tls
+                    Security = true
+                };
+                optionBuilder.UseMailKit(x);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

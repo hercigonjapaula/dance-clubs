@@ -1,0 +1,45 @@
+﻿@model DanceClubs.Data.Models.Group
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Dodaj</h1>
+
+<h4>Grupa</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label">Naziv grupe</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ClubId" class="control-label">Klub</label>
+                <select asp-for="ClubId" class ="form-control" asp-items="ViewBag.ClubId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DanceStyleId" class="control-label">Vrsta plesa</label>
+                <select asp-for="DanceStyleId" class ="form-control" asp-items="ViewBag.DanceStyleId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="AgeGroupId" class="control-label">Dobna skupina</label>
+                <select asp-for="AgeGroupId" class ="form-control" asp-items="ViewBag.AgeGroupId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Dodaj" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Lista grupa</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

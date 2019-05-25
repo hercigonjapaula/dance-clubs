@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace DanceClubs.Models
+namespace DanceClubs.Services
 {
-    public class NewsModel
+    public class MailService
     {
     }
 }
