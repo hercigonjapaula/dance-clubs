@@ -1,47 +1,81 @@
 ﻿using DanceClubs.Data;
 using DanceClubs.Data.Models;
-using DanceClubs.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Ical.Net;
+using Ical.Net.CalendarComponents;
 using System.Linq;
-using System.Threading.Tasks;
+using Ical.Net.DataTypes;
+using System;
+using Microsoft.AspNetCore.Authorization;
+using Ical.Net.Serialization;
+using DanceClubs.Models;
 
 namespace DanceClubs.Controllers
 {
     //[Authorize(Roles = "User")]
     public class CalendarController : Controller
     {
+        private readonly ApplicationDbContext _context;
         private readonly IRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public CalendarController(IRepository repository, UserManager<ApplicationUser> userManager)
+        public CalendarController(ApplicationDbContext context, IRepository repository, UserManager<ApplicationUser> userManager)
         {
+            _context = context;
             _repository = repository;
             _userManager = userManager;       
         }
 
         public IActionResult Index()
         {
-            return View();
-        }
 
-        public IActionResult AddNewActivity()
-        {
-            return View();
-        }
+            var userId = _userManager.GetUserId(User);
 
-        [HttpPost]
-        public async Task<IActionResult> AddNewActivity(ActivityInput activityInput)
-        {
-            var activity = new Activity
+            var groupUsers = _repository.GetGroupUsersByUserId(userId);
+            var activities = groupUsers.SelectMany(i => _repository.GetActivitiesByGroupId(i.GroupId)).ToList();
+            var model = new CalendarIndexModel();
+            model.Activities = activities.Select(a => new ActivityListingModel
             {
-                
-            };
-
-            await _repository.AddActivity(activity);
-
-            return RedirectToAction("Index");
+                ActivityType=a.ActivityType.Name,
+                Author=a.Author.UserName,
+                Start=a.Start,
+                End=a.End,
+                Group=a.Group.Name,
+                Location=a.Location
+            }).ToList();
+            return View(model);
         }
+
+        public IActionResult ICal()
+        {
+            var userId = _userManager.GetUserId(User);
+
+            var groupUsers = _repository.GetGroupUsersByUserId(userId);
+            var activities = groupUsers.SelectMany(i => _repository.GetActivitiesByGroupId(i.GroupId)).ToList();
+
+            var calendar = new Calendar();
+
+            foreach(var activity in activities)
+            {
+                calendar.Events.Add(new CalendarEvent
+                {
+                    Class = "PUBLIC",
+                    Created = new CalDateTime(DateTime.Now),
+                    Start = new CalDateTime(activity.Start),
+                    End = new CalDateTime(activity.End),
+                    Sequence = 0,
+                    Uid = Guid.NewGuid().ToString(),
+                    Location = activity.Location
+                });
+            }
+
+            var calendarSerializer = new CalendarSerializer();
+            var ics = calendarSerializer.SerializeToString(calendar);
+            
+
+            return View();
+        }
+
     }
 }

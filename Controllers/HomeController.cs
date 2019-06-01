@@ -5,6 +5,9 @@ using DanceClubs.Models;
 using DanceClubs.Data;
 using Microsoft.AspNetCore.Identity;
 using DanceClubs.Data.Models;
+using System.Linq;
+using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DanceClubs.Controllers
 {
@@ -12,47 +15,62 @@ namespace DanceClubs.Controllers
     {
         private readonly IRepository _repository;
         private static UserManager<ApplicationUser> _userManager;
+        private readonly IServiceProvider serviceProvider;
 
-        public HomeController(IRepository repository, UserManager<ApplicationUser> userManager)
+        public HomeController(IServiceProvider serviceProvider, IRepository repository, UserManager<ApplicationUser> userManager)
         {
             _repository = repository;
             _userManager = userManager;
+            this.serviceProvider = serviceProvider;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
-        }
 
-        [HttpGet]
-        public IActionResult AddNotification()
-        {
-            return View();
+            var userId = _userManager.GetUserId(base.User);
+            var groupUsers = _repository.GetGroupUsersByUserId(userId);
+            var notifications = groupUsers.SelectMany(i => _repository.GetNotificationsByGroupId(i.GroupId)).OrderByDescending(i => i.Published).ToList();
+            var model = new NotificationIndexModel
+            {
+                NotificationListingModels = new List<NotificationListingModel>()
+            };
+            foreach (var notif in notifications)
+            {
+                var comments = _repository.GetCommentsByNotificationId(notif.Id);
+                model.NotificationListingModels.Add(new NotificationListingModel
+                {
+                    Id = notif.Id,
+                    Author = notif.Author.UserName,
+                    AuthorImage = notif.Author.ProfileImageUrl,
+                    Content = notif.Content,
+                    Published = notif.Published,
+                    ClubName = notif.Group.Club.Name,
+                    GroupName = notif.Group.Name,
+                    CommentListingModels = (comments != null) ? comments.Select(i => new CommentListingModel
+                    {
+                        Author = i.Author.UserName,
+                        AuthorImage = i.Author.ProfileImageUrl,
+                        Content = i.Content,
+                        Published = i.Published
+
+                    }).ToList() : new List<CommentListingModel>()
+                });
+            }
+            return View(model);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNotification(NotificationInput notificationInput)
+        public async Task<IActionResult> CreateComment(string content, int idNotif)
         {
-            var authorId = _userManager.GetUserId(User);
-            var author = _repository.GetApplicationUserById(authorId);
-
-            await _repository.AddNotification(new Notification
+            var userId = _userManager.GetUserId(User);
+            await _repository.AddComment(new Comment
             {
-                Content = notificationInput.Content,
-                Published = DateTime.Now,
-                Author = author
+                AuthorId = userId,
+                Content = content,
+                NotificationId = idNotif,
+                Published = DateTime.Now
             });
-
-            foreach (string group in notificationInput.GroupNames)
-            {
-                
-                await _repository.AddNotificationGroup(new NotificationGroup
-                {
-                    
-                });
-            }
-
-            return RedirectToAction("Index");
+            return Redirect("/");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

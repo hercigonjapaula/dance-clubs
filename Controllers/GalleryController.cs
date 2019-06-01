@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DanceClubs.Controllers
 {
-    [Authorize(Roles = "User")]
+    //[Authorize(Roles = "User")]
     public class GalleryController : Controller
     {
         public IActionResult Index()

@@ -4,9 +4,9 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Uredi</h1>
 
-<h4>ClubUser</h4>
+<h4>Član kluba</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,27 +14,27 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="ApplicationUserId" class="control-label"></label>
+                <label asp-for="ApplicationUserId" class="control-label">Korisnik</label>
                 <select asp-for="ApplicationUserId" class="form-control" asp-items="ViewBag.ApplicationUserId"></select>
                 <span asp-validation-for="ApplicationUserId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ClubId" class="control-label"></label>
+                <label asp-for="ClubId" class="control-label">Klub</label>
                 <select asp-for="ClubId" class="form-control" asp-items="ViewBag.ClubId"></select>
                 <span asp-validation-for="ClubId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MemberFrom" class="control-label"></label>
+                <label asp-for="MemberFrom" class="control-label">Član od</label>
                 <input asp-for="MemberFrom" class="form-control" />
                 <span asp-validation-for="MemberFrom" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="MemberTo" class="control-label"></label>
+                <label asp-for="MemberTo" class="control-label">Član do</label>
                 <input asp-for="MemberTo" class="form-control" />
                 <span asp-validation-for="MemberTo" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Spremi" class="btn btn-primary" />
             </div>
         </form>
     </div>

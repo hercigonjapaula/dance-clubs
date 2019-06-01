@@ -2,6 +2,20 @@
   "version": 3,
   "targets": {
     ".NETCoreApp,Version=v2.2": {
+      "Ical.Net/4.1.11": {
+        "type": "package",
+        "dependencies": {
+          "NodaTime": "2.0.2",
+          "System.Reflection.TypeExtensions": "4.1.0",
+          "System.Runtime.Serialization.Primitives": "4.3.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/Ical.Net.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/Ical.Net.dll": {}
+        }
+      },
       "Libuv/1.10.0": {
         "type": "package",
         "dependencies": {
@@ -3639,6 +3653,19 @@
           "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {}
         }
       },
+      "NodaTime/2.0.2": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "System.Runtime.Serialization.Xml": "4.1.1"
+        },
+        "compile": {
+          "lib/netstandard1.3/NodaTime.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/NodaTime.dll": {}
+        }
+      },
       "NuGet.Frameworks/4.7.0": {
         "type": "package",
         "dependencies": {
@@ -5966,6 +5993,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.2",
         "dependencies": {
+          "Ical.Net": "4.1.11",
           "Microsoft.AspNetCore.All": "2.2.3"
         },
         "compile": {
@@ -5979,7 +6007,8 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.2",
         "dependencies": {
-          "DanceClubs.Data": "1.0.0"
+          "DanceClubs.Data": "1.0.0",
+          "Ical.Net": "4.1.11"
         },
         "compile": {
           "bin/placeholder/DanceClubs.Service.dll": {}
@@ -5991,6 +6020,25 @@
     }
   },
   "libraries": {
+    "Ical.Net/4.1.11": {
+      "sha512": "4ybehjodGZjljUh5iphNp55sQPSVnSPOIayyynoSEdUmBGZySrn8QxaVj+bRDv1AOyCcJKpbrb9+miMh1P0vpA==",
+      "type": "package",
+      "path": "ical.net/4.1.11",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ical.net.4.1.11.nupkg.sha512",
+        "ical.net.nuspec",
+        "lib/Ical.Net.xml",
+        "lib/net46/Ical.Net.dll",
+        "lib/net46/Ical.Net.pdb",
+        "lib/net46/Ical.Net.xml",
+        "lib/netstandard1.3/Ical.Net.deps.json",
+        "lib/netstandard1.3/Ical.Net.dll",
+        "lib/netstandard1.3/Ical.Net.pdb",
+        "lib/netstandard1.3/Ical.Net.xml"
+      ]
+    },
     "Libuv/1.10.0": {
       "sha512": "GsCf4q+eyaI49rCPlgYxdxa1SQCysXFFdSJWdstrwxytg4+VPYLYrXD4AT2rjHVJ+UF7SSWX9CapWEYaU4ejVQ==",
       "type": "package",
@@ -10033,6 +10081,21 @@
         "lib/netstandard1.3/Newtonsoft.Json.Bson.xml",
         "newtonsoft.json.bson.1.0.1.nupkg.sha512",
         "newtonsoft.json.bson.nuspec"
+      ]
+    },
+    "NodaTime/2.0.2": {
+      "sha512": "JBPy6lkrwKF7z6BX1jdqgnSZ4w31W6kgoMsmOZXyFr/z/VGjR3gtjh/qixdmfsSCIa1YvL89dqIsW6Hvi+2SHQ==",
+      "type": "package",
+      "path": "nodatime/2.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net45/NodaTime.dll",
+        "lib/net45/NodaTime.xml",
+        "lib/netstandard1.3/NodaTime.dll",
+        "lib/netstandard1.3/NodaTime.xml",
+        "nodatime.2.0.2.nupkg.sha512",
+        "nodatime.nuspec"
       ]
     },
     "NuGet.Frameworks/4.7.0": {
@@ -15686,6 +15749,7 @@
     ".NETCoreApp,Version=v2.2": [
       "DanceClubs.Data >= 1.0.0",
       "DanceClubs.Service >= 1.0.0",
+      "Ical.Net >= 4.1.11",
       "Microsoft.AspNetCore.App >= 2.2.0",
       "Microsoft.AspNetCore.Razor.Design >= 2.2.0",
       "Microsoft.NETCore.App >= 2.2.0",
@@ -15741,6 +15805,10 @@
     "frameworks": {
       "netcoreapp2.2": {
         "dependencies": {
+          "Ical.Net": {
+            "target": "Package",
+            "version": "[4.1.11, )"
+          },
           "Microsoft.AspNetCore.App": {
             "suppressParent": "All",
             "target": "Package",

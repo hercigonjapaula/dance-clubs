@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.2",
-    "signature": "e6533b47c330d84e35033908d69a553f4f8b2229"
+    "signature": "5a10e82c85952b0352701fe0337ed8209466ca3b"
   },
   "compilationOptions": {
     "defines": [
@@ -26,6 +26,7 @@
         "dependencies": {
           "DanceClubs.Data": "1.0.0",
           "DanceClubs.Service": "1.0.0",
+          "Ical.Net": "4.1.11",
           "Microsoft.AspNetCore.App": "2.2.0",
           "Microsoft.AspNetCore.Razor.Design": "2.2.0",
           "Microsoft.NETCore.App": "2.2.0",
@@ -37,6 +38,22 @@
         },
         "compile": {
           "DanceClubs.dll": {}
+        }
+      },
+      "Ical.Net/4.1.11": {
+        "dependencies": {
+          "NodaTime": "2.0.2",
+          "System.Reflection.TypeExtensions": "4.3.0",
+          "System.Runtime.Serialization.Primitives": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Ical.Net.dll": {
+            "assemblyVersion": "4.1.8.0",
+            "fileVersion": "4.1.8.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard1.3/Ical.Net.dll": {}
         }
       },
       "Libuv/1.10.0": {
@@ -1474,6 +1491,21 @@
           "Microsoft.NETCore.Platforms": "2.2.0"
         }
       },
+      "NodaTime/2.0.2": {
+        "dependencies": {
+          "NETStandard.Library": "2.0.3",
+          "System.Runtime.Serialization.Xml": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/NodaTime.dll": {
+            "assemblyVersion": "2.0.2.0",
+            "fileVersion": "2.0.2.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard1.3/NodaTime.dll": {}
+        }
+      },
       "NuGet.Frameworks/4.7.0": {
         "dependencies": {
           "NETStandard.Library": "2.0.3"
@@ -2126,6 +2158,7 @@
       },
       "DanceClubs.Data/1.0.0": {
         "dependencies": {
+          "Ical.Net": "4.1.11",
           "Microsoft.AspNetCore.All": "2.2.3"
         },
         "runtime": {
@@ -2137,7 +2170,8 @@
       },
       "DanceClubs.Service/1.0.0": {
         "dependencies": {
-          "DanceClubs.Data": "1.0.0"
+          "DanceClubs.Data": "1.0.0",
+          "Ical.Net": "4.1.11"
         },
         "runtime": {
           "DanceClubs.Service.dll": {}
@@ -4896,6 +4930,13 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Ical.Net/4.1.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4ybehjodGZjljUh5iphNp55sQPSVnSPOIayyynoSEdUmBGZySrn8QxaVj+bRDv1AOyCcJKpbrb9+miMh1P0vpA==",
+      "path": "ical.net/4.1.11",
+      "hashPath": "ical.net.4.1.11.nupkg.sha512"
+    },
     "Libuv/1.10.0": {
       "type": "package",
       "serviceable": true,
@@ -5378,6 +5419,13 @@
       "sha512": "sha512-st47PosZSHrjECdjeIzZQbzivYBJFv6P2nv4cj2ypdI204DO+vZ7l5raGMiX4eXMJ53RfOIg+/s4DHVZ54Nu2A==",
       "path": "netstandard.library/2.0.3",
       "hashPath": "netstandard.library.2.0.3.nupkg.sha512"
+    },
+    "NodaTime/2.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JBPy6lkrwKF7z6BX1jdqgnSZ4w31W6kgoMsmOZXyFr/z/VGjR3gtjh/qixdmfsSCIa1YvL89dqIsW6Hvi+2SHQ==",
+      "path": "nodatime/2.0.2",
+      "hashPath": "nodatime.2.0.2.nupkg.sha512"
     },
     "NuGet.Frameworks/4.7.0": {
       "type": "package",

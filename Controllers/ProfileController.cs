@@ -4,10 +4,11 @@ using DanceClubs.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace DanceClubs.Controllers
 {
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "User,Admin,Vlasnik")]
     public class ProfileController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -22,17 +23,31 @@ namespace DanceClubs.Controllers
 
         public IActionResult Index(string id)
         {
+            return Redirect("/identity/Account/Manage");
+            //var userId = _userManager.GetUserId(User);
+            //var user = _repository.GetApplicationUserById(userId);
+            //var model = new ProfileModel
+            //{
+            //    UserId = userId,
+            //    Email = user.Email,
+            //    UserName = user.UserName,
+            //    ProfileImageUrl = user.ProfileImageUrl
+            //};
+
+            //return View(model);
+        } 
+        
+        public async Task<IActionResult> Update(ProfileModel model)
+        {
             var userId = _userManager.GetUserId(User);
             var user = _repository.GetApplicationUserById(userId);
-            var model = new ProfileModel
-            {
-                UserId = userId,
-                Email = user.Email,
-                UserName = user.UserName,
-                ProfileImageUrl = user.ProfileImageUrl
-            };
+            user.Email = model.Email;
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            await _userManager.ResetPasswordAsync(user, token, model.Password);
 
-            return View(model);
-        }        
+            return Redirect("Index");
+        }
     }
 }

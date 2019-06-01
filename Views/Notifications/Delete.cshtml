@@ -1,0 +1,51 @@
+﻿@model DanceClubs.Data.Models.Notification
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Izbriši</h1>
+
+<h3>Jeste li sigurni da želite izbrisati obavijest?</h3>
+<div>
+    <h4>Obavijest</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Content)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Content)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Published)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Published)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EmailsSent)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EmailsSent)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Author)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Author.UserName)
+        </dd class>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Group)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Group.Name)
+        </dd class>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Izbriši" class="btn btn-danger" /> |
+        <a asp-action="Index">Lista obavijesti</a>
+    </form>
+</div>

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DanceClubs.Controllers
 {
-    //[Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "ADMIN,Admin,admin")]
     public class AdminController: Controller
     {
         private readonly IRepository _repository;
@@ -33,7 +33,7 @@ namespace DanceClubs.Controllers
 
             var model = new ClubIndexModel
             {
-                ClubList = clubs
+                ClubList = clubs.ToList()
             };
 
             return View(model);

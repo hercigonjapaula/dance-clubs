@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DanceClubs.Data;
 using DanceClubs.Data.Models;
-using DanceClubs.Models;
 
 namespace DanceClubs.Controllers
 {
@@ -50,7 +49,7 @@ namespace DanceClubs.Controllers
         // GET: ClubUsers/Create
         public IActionResult Create()
         {
-            ViewData["ApplicationUserId"] = new MultiSelectList(_context.ApplicationUsers.Select(u => new { Id = u.Id, Name = u.UserName}), "Id", "Name");
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "UserName");
             ViewData["ClubId"] = new SelectList(_context.Clubs, "Id", "Name");
             return View();
         }
@@ -60,27 +59,18 @@ namespace DanceClubs.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ApplicationUserId,ClubId,MemberTo")] ClubUsers clubUsers)
+        public async Task<IActionResult> Create([Bind("Id,ApplicationUserId,ClubId,MemberTo")] ClubUser clubUser)
         {
             if (ModelState.IsValid)
-            {
-                foreach (var user in clubUsers.ApplicationUserId)
-                {
-                    var model = new ClubUser
-                    {
-                        ApplicationUserId = user,
-                        ClubId = clubUsers.ClubId,
-                        MemberFrom = DateTime.Now,
-                        MemberTo = clubUsers.MemberTo
-                    };
-                    _context.Add(model);
-                }                
+            {                
+                clubUser.MemberFrom = DateTime.Now;
+                _context.Add(clubUser);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", clubUsers.ApplicationUserId);
-            ViewData["ClubId"] = new SelectList(_context.Clubs, "Id", "Id", clubUsers.ClubId);
-            return View();
+            ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", clubUser.ApplicationUserId);
+            ViewData["ClubId"] = new SelectList(_context.Clubs, "Id", "Id", clubUser.ClubId);
+            return View(clubUser);
         }
 
         // GET: ClubUsers/Edit/5

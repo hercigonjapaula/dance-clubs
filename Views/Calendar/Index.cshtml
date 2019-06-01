@@ -1,6 +1,68 @@
-﻿<h1>Kalendar</h1>
-<div style="float:right; padding:15px">
-    <form asp-controller="Calendar" asp-action="AddNewActivity" method="get">
-        <a class="btn btn-primary btn-md" href="/Activities/Create">Dodaj aktivnost</a>
-    </form>
+﻿@model DanceClubs.Models.CalendarIndexModel
+
+@{ var dict = new Dictionary<string, string>();
+    dict.Add("Trening", "bg-danger");
+    dict.Add("Proba", "bg-info");
+    dict.Add("Nastup", "bg-warning");
+    dict.Add("Radionica", "bg-success");
+
+}
+
+<a class="btn btn-primary" href="/Activites/Create" style="float:right">Dodaj aktivnost</a>
+<br />
+
+<a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+</a>
+<a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+</a>
+
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators"></ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <div>
+                <div class="card text-white @dict[Model.Activities.First().ActivityType] mb-3">
+                    <div class="card-header">@Model.Activities.First().ActivityType</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.Activities.First().Start - @Model.Activities.First().End</h5>
+                        <p class="card-text">@Model.Activities.First().Location</p>
+                    </div>
+                </div>
+                <div class="card text-white @dict[Model.Activities.First().ActivityType] mb-3">
+                    <div class="card-header">@Model.Activities.First().ActivityType</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.Activities.First().Start - @Model.Activities.First().End</h5>
+                        <p class="card-text">@Model.Activities.First().Location</p>
+                    </div>
+                </div>
+                <div class="card text-white @dict[Model.Activities.First().ActivityType] mb-3">
+                    <div class="card-header">@Model.Activities.First().ActivityType</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.Activities.First().Start - @Model.Activities.First().End</h5>
+                        <p class="card-text">@Model.Activities.First().Location</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+       @*foreach po tjednima*@
+        <div class="carousel-item">
+            <div>
+                @*foreach po activitijima za taj tjedan*@
+                <div class="card text-white @dict[Model.Activities.First().ActivityType] mb-3">
+                    <div class="card-header">@Model.Activities.First().ActivityType</div>
+                    <div class="card-body">
+                        <h5 class="card-title">@Model.Activities.First().Start - @Model.Activities.First().End</h5>
+                        <p class="card-text">@Model.Activities.First().Location</p>
+                    </div>
+                </div>
+                @*kraj foreach aktivity*@
+            </div>
+        </div>
+        @*kraj foreach tjedni*@
+    </div>
+
 </div>

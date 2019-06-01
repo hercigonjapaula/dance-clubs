@@ -1,11 +1,8 @@
 ﻿@model DanceClubs.Models.ClubIndexModel
 
 
-<h1>Plesni klubovi</h1>
 <div style="float:right; padding:15px">
-    <form asp-controller="Admin" asp-action="AddNewClub" method="get">
-        <a class="btn btn-primary" href="/Admin/AddNewClub">Dodaj klub</a>
-    </form>
+    <a class="btn btn-primary" href="/Clubs/Create">Dodaj klub</a>
 </div>
 <table class="table table-hover" id="clubIndexTable">
     <tbody style="background-color:white">

@@ -44,10 +44,12 @@ namespace DanceClubs
             services.AddDbContext<Data.ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<ApplicationUser>()
-                .AddRoles<ApplicationRole>()
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                
+                .AddRoleManager<RoleManager<IdentityRole>>()                
                 .AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<ApplicationDbContext>();            
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();            
 
             services.AddScoped<IRepository, Repository>();
 
@@ -93,7 +95,6 @@ namespace DanceClubs
             app.UseCookiePolicy();
 
             app.UseAuthentication();
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

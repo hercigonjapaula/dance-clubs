@@ -1,4 +1,4 @@
-﻿@model DanceClubs.Models.ClubUsers
+﻿@model DanceClubs.Data.Models.ClubUser
 
 @{
     ViewData["Title"] = "Create";
@@ -13,21 +13,20 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ApplicationUserId" class="control-label">Korisnička imena</label>
-                @Html.DropDownList("ApplicationUserId", (MultiSelectList)ViewBag.ApplicationUserId, new { multiple = "multiple" })
-                @*<select multiple="" asp-for="ApplicationUserId" class ="form-control" asp-items="ViewBag.ApplicationUserId"></select>*@
+                <label asp-for="ApplicationUserId" class="control-label">Korisnik</label>
+                <select asp-for="ApplicationUserId" class ="form-control" asp-items="ViewBag.ApplicationUserId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ClubId" class="control-label">Klub</label>
                 <select asp-for="ClubId" class ="form-control" asp-items="ViewBag.ClubId"></select>
             </div>
-            @*<div class="form-group">
+            @*@<div class="form-group">
                 <label asp-for="MemberFrom" class="control-label"></label>
                 <input asp-for="MemberFrom" class="form-control" />
                 <span asp-validation-for="MemberFrom" class="text-danger"></span>
             </div>*@
             <div class="form-group">
-                <label asp-for="MemberTo" class="control-label">Kraj članstva</label>
+                <label asp-for="MemberTo" class="control-label">Istek članstva</label>
                 <input asp-for="MemberTo" class="form-control" />
                 <span asp-validation-for="MemberTo" class="text-danger"></span>
             </div>

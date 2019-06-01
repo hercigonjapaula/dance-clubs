@@ -27,11 +27,11 @@ namespace DanceClubs.Controllers
                  {
                      Id = c.Id,
                      Name = c.Name
-                 });                          
+                 });
 
             var model = new ClubIndexModel
             {
-                ClubList = clubs
+                ClubList = clubs.ToList()
             };
 
             return View(model);

@@ -7,6 +7,6 @@ namespace DanceClubs.Models
 {
     public class ClubIndexModel
     {
-        public IEnumerable<ClubListingModel> ClubList { get; set; }
+        public List<ClubListingModel> ClubList { get; set; }
     }
 }

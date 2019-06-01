@@ -4,9 +4,9 @@
     ViewData["Title"] = "Delete";
 }
 
-<h1>Delete</h1>
+<h1>Izbriši</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Jeste li sigurni da želite izbrisati člana kluba?</h3>
 <div>
     <h4>ClubUser</h4>
     <hr />
@@ -15,13 +15,13 @@
             @Html.DisplayNameFor(model => model.ApplicationUser)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ApplicationUser.Id)
+            @Html.DisplayFor(model => model.ApplicationUser.UserName)
         </dd class>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Club)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Club.Id)
+            @Html.DisplayFor(model => model.Club.Name)
         </dd class>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.MemberFrom)
@@ -39,7 +39,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Izbriši" class="btn btn-danger" /> |
+        <a asp-action="Index">Lista članova kluba</a>
     </form>
 </div>

@@ -1,0 +1,29 @@
+{
+  "name": "danceclubs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hercigonjapaula/dance-clubs.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hercigonjapaula/dance-clubs/issues"
+  },
+  "homepage": "https://github.com/hercigonjapaula/dance-clubs#readme",
+  "dependencies": {
+    "@fullcalendar/core": "^4.1.0",
+    "@fullcalendar/timegrid": "^4.1.0",
+    "tui-calendar": "^1.12.0"
+  },
+  "devDependencies": {
+    "rollup": "^1.12.4",
+    "rollup-plugin-commonjs": "^10.0.0",
+    "rollup-plugin-node-resolve": "^5.0.0"
+  }
+}
