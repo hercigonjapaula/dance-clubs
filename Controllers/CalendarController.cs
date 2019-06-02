@@ -28,23 +28,38 @@ namespace DanceClubs.Controllers
         }
 
         public IActionResult Index()
-        {
+        {            
+            return View();
+        }
 
+        public JsonResult GetEvents()
+        {
             var userId = _userManager.GetUserId(User);
 
             var groupUsers = _repository.GetGroupUsersByUserId(userId);
             var activities = groupUsers.SelectMany(i => _repository.GetActivitiesByGroupId(i.GroupId)).ToList();
-            var model = new CalendarIndexModel();
-            model.Activities = activities.Select(a => new ActivityListingModel
+            var model = new CalendarIndexModel
             {
-                ActivityType=a.ActivityType.Name,
-                Author=a.Author.UserName,
-                Start=a.Start,
-                End=a.End,
-                Group=a.Group.Name,
-                Location=a.Location
-            }).ToList();
-            return View(model);
+                Activities = activities.Select(a => new ActivityListingModel
+                {
+                    Description = a.Group.Name + "\n" + a.ActivityType.Name + "\n" + a.Location,
+                    ActivityType = a.ActivityType.Name,
+                    Author = a.Author.UserName,
+                    Start = a.Start,
+                    End = a.End,
+                    Group = a.Group.Name,
+                    Location = a.Location
+                }).ToList()
+            };
+
+            var events = model.Activities.Select(e => new
+            {
+                title = e.Description.Replace("\n", Environment.NewLine),                
+                start = e.Start.Subtract(new DateTime(1970, 1, 1, 2, 0, 0, DateTimeKind.Utc)).TotalMilliseconds,
+                end = e.End.Subtract(new DateTime(1970, 1, 1, 2, 0, 0, DateTimeKind.Utc)).TotalMilliseconds
+            });
+
+            return Json(events.ToArray());            
         }
 
         public IActionResult ICal()

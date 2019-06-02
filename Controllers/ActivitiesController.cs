@@ -73,17 +73,17 @@ namespace DanceClubs.Controllers
             if (ModelState.IsValid)
             {
                 activity.AuthorId = _userManager.GetUserId(User);
-                var emailsAddresses = new string[] { "paula.hercigonja@gmail.com" };//activity?.Group?.Members?.Select(m => m?.ApplicationUser?.Email);
-                var message = $"Kreirana je nova aktivnost koja počinje {activity.Start} i završava {activity.End}.";
+                /*var emailsAddresses = new string[] { "paula.hercigonja@gmail.com" };//activity?.Group?.Members?.Select(m => m?.ApplicationUser?.Email);
+                var message = $"Kreirana je nova aktivnost koja počinje {activity.Start} i završava {activity.End}.";*/
                
                 _context.Add(activity);
                 await _context.SaveChangesAsync();                
 
-                foreach (var addr in emailsAddresses)
+                /*foreach (var addr in emailsAddresses)
                 {
                     await _EmailService.SendAsync(addr, "Kreirana je nova aktivnost", message);
 
-                }
+                }*/
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Id", activity.ActivityTypeId);

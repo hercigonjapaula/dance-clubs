@@ -1,13 +1,12 @@
-(function () {
-    'use strict';
+import Calendar from '@fullcalendar/core';
+import timeGridPlugin from '@fullcalendar/timegrid';
 
-    // Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-    // for details on configuring this project to bundle and minify static web assets.
+document.addEventListener('DOMContentLoaded', function () {
+    var calendarEl = document.getElementById('calendar');
 
-    // Write your JavaScript code.
-    Calendar = require("../lib/tui-calendar/index.js");
-    new Calendar("#calendar", {
-        defaultView: "month"
+    var calendar = new Calendar(calendarEl, {
+        plugins: [timeGridPlugin]
     });
 
-}());
+    calendar.render();
+});

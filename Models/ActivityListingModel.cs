@@ -7,6 +7,7 @@ namespace DanceClubs.Models
 {
     public class ActivityListingModel
     {
+        public string Description { get; set; }
         public string ActivityType { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
