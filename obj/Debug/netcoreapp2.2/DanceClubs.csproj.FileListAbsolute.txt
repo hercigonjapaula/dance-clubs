@@ -116,3 +116,5 @@ C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\
 C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\Clubs\Details.g.cshtml.cs
 C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\Clubs\Edit.g.cshtml.cs
 C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\Clubs\Index.g.cshtml.cs
+C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\MembershipFee\MyClubsFees.g.cshtml.cs
+C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\MembershipFee\Create.g.cshtml.cs
