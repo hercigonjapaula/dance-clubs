@@ -83,7 +83,7 @@ namespace DanceClubs.Controllers
 
         {
             var userId = _userManager.GetUserId(User);
-            var clubOwners = _repository.GetClubOwnersByUserId(userId);
+            var clubOwners = _repository.GetClubOwnersByUserId(userId);            
             var clubUsers = clubOwners.SelectMany(o => _repository.GetClubUsersByClubId(o.ClubId))
                 .OrderBy(u => u.Club.Name).ThenBy(u => u.ApplicationUser.UserName).ToList();
             //var users = clubUsers.Select(u => _repository.GetApplicationUserById(u.ApplicationUserId)).ToList();
@@ -95,7 +95,7 @@ namespace DanceClubs.Controllers
                     ClubUserId = user.Id,
                     Name = user.ApplicationUser.UserName
                 });
-            }
+            }            
             ViewData["ClubUserId"] = new SelectList(users, "ClubUserId", "Name");            
             return View();
         }

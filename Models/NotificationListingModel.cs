@@ -14,6 +14,7 @@ namespace DanceClubs.Models
         public string Author { get; set; }
         public string AuthorImage { get; set; }
         public string Content { get; set; }
+        public string ImageUrl { get; set; }
         public List<CommentListingModel> CommentListingModels { get; set; }
 
     }

@@ -43,6 +43,7 @@ namespace DanceClubs.Controllers
                     Author = notif.Author.UserName,
                     AuthorImage = notif.Author.ProfileImageUrl,
                     Content = notif.Content,
+                    ImageUrl = notif.ImageUrl,
                     Published = notif.Published,
                     ClubName = notif.Group.Club.Name,
                     GroupName = notif.Group.Name,

@@ -42,7 +42,7 @@ namespace DanceClubs.Controllers
             {
                 Activities = activities.Select(a => new ActivityListingModel
                 {
-                    Description = a.Group.Name + "\n" + a.ActivityType.Name + "\n" + a.Location,
+                    Description = a.Group.Name + "\n" + "- " + a.ActivityType.Name + "\n" + "[" + a.Location + "]",
                     ActivityType = a.ActivityType.Name,
                     Author = a.Author.UserName,
                     Start = a.Start,

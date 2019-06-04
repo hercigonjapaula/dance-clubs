@@ -60,7 +60,7 @@ namespace DanceClubs.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Content,Published,EmailsSent,AuthorId,GroupId")] Notification notification)
+        public async Task<IActionResult> Create([Bind("Id,Content,ImageUrl,GroupId")] Notification notification)
         {
 
             if (ModelState.IsValid)
@@ -71,7 +71,7 @@ namespace DanceClubs.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }            
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id", notification.GroupId);
+            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Name", notification.GroupId);
             return View(notification);
         }
 
@@ -97,7 +97,7 @@ namespace DanceClubs.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Content,Published,EmailsSent,AuthorId,GroupId")] Notification notification)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Content,ImageUrl,GroupId")] Notification notification)
         {
             if (id != notification.Id)
             {

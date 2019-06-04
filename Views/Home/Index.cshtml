@@ -1,32 +1,33 @@
 ﻿@model DanceClubs.Models.NotificationIndexModel
 
 <div>
-    <a class="btn btn-primary" href="/Notifications/Create" style="float:right">Dodaj obavijest</a>
+    <a class="btn btn-primary" href="/Notifications/Create" style="float:right;margin-right:90px">Dodaj obavijest</a>
     <br />
     <br />
     @foreach (var notif in Model?.NotificationListingModels ?? new List<NotificationListingModel>())
     {
-        <div class="card">
-            <div class="card-header">
-                <img src="@notif.AuthorImage" style="width:6%;height:6%;display:inline-block"/>
-                <h5 style="display:inline-block">@notif.Author</h5>                
+        <div class="card" style="max-width:60rem;margin:auto;border-radius:25px">
+            <img src="@notif.ImageUrl" class="card-img-top" style="object-fit:cover;max-width:60rem;max-height:10rem;border-radius:25px 25px 0px 0px"/>
+            <div class="card-header" style="border-radius:0px 0px 25px 25px">
+                <img src="@notif.AuthorImage" style="width:6%;height:6%;display:inline-block;border-radius:25px"/>
+                <h5 style="display:inline-block;">@notif.Author</h5>                
             </div>
             <div class="card-body">
                 <h5>@notif.ClubName : @notif.GroupName</h5>
                 <p class="card-title">@notif.Content</p>
-                <p class="card-text" style="display:inline-block">@notif.Published</p>
-                <button data-toggle="modal" data-target="#Komentiraj_@notif.Id" class="float-right btn btn-outline-primary ml-2" style="display:inline-block"> <i class="fa fa-reply"></i>Komentiraj</button>
+                <p class="card-text" style="display:inline-block;font-size:smaller">@notif.Published</p>
+                <button data-toggle="modal" data-target="#Komentiraj_@notif.Id" class="float-right btn btn-primary ml-2" style="display:inline-block;border-width:medium;"> <i class="fa fa-reply"></i>Komentiraj</button>
                 @foreach (var comment in notif.CommentListingModels)
                 {
-                    <div class="card-footer">
-                        <div class="card">
-                            <div class="card-header">
-                                <img src="@comment.AuthorImage" style="width:4%;height:4%;display:inline-block" />
+                    <div class="card-footer" style="border-radius:25px;margin-top:10px">
+                        <div class="card" style="border-radius:25px">
+                            <div class="card-header" style="border-radius:25px">
+                                <img src="@comment.AuthorImage" style="width:4%;height:4%;display:inline-block;border-radius:25px" />
                                 <h6 style="display:inline-block">@comment.Author</h6>
                             </div>
                             <div class="card-body">
                                 <p class="card-title">@comment.Content</p>
-                                <p class="card-text">@comment.Published</p>
+                                <p class="card-text" style="font-size:smaller">@comment.Published</p>
                             </div>
                         </div>
                     </div>
@@ -42,13 +43,13 @@
                     </div>
                     <div class="modal-body">
                         <form id="form_@notif.Id" action="/Home/CreateComment" method="post">
-                            <textarea placeholder="Comment..." type="text" id="Content" name="Content" value=""></textarea>
+                            <textarea placeholder="Komentar..." type="text" id="Content" name="Content" value="" style="width:400px"></textarea>
                             <input name="idNotif" type="hidden" value="@notif.Id">
                         </form>
 
                     </div>
                     <div class="modal-footer">
-                        <button form="form_@notif.Id" type="submit" class="btn btn-primary"> Objavi</button>
+                        <button form="form_@notif.Id" type="submit" class="btn btn-primary">Objavi</button>
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Natrag</button>
                     </div>
                 </div>

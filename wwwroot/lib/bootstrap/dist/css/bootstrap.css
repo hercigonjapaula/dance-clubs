@@ -2333,15 +2333,15 @@ fieldset:disabled a.btn {
 }
 
 .btn-primary {
-  color: #fff;
-  background-color: mediumpurple;
-  border-color: mediumpurple;
+    color: #fff;
+    background-color: #2C3E50;
+    border-color: #2C3E50;
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: rebeccapurple;
-  border-color: rebeccapurple;
+  background-color: #212529;
+  border-color: #212529;
 }
 
 .btn-primary:focus, .btn-primary.focus {
@@ -2605,16 +2605,16 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-primary {
-  color: mediumpurple;
-  background-color: transparent;
-  background-image: none;
-  border-color: mediumpurple;
+    color: #2C3E50;
+    background-color: transparent;
+    background-image: none;
+    border-color: #2C3E50;
 }
 
 .btn-outline-primary:hover {
   color: #fff;
-  background-color: mediumpurple;
-  border-color: mediumpurple;
+  background-color: #212529;
+  border-color: #212529;
 }
 
 .btn-outline-primary:focus, .btn-outline-primary.focus {
@@ -3898,6 +3898,10 @@ input[type="button"].btn-block {
   margin-bottom: -1px;
 }
 
+.nav-item:hover {
+    background-color: rgba(0, 0, 0, 0.075);
+}
+
 .nav-tabs .nav-link {
   border: 1px solid transparent;
   border-top-left-radius: 0.25rem;
@@ -3969,7 +3973,7 @@ input[type="button"].btn-block {
   align-items: center;
   -ms-flex-pack: justify;
   justify-content: space-between;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 1rem;  
 }
 
 .navbar > .container,
@@ -4005,7 +4009,7 @@ input[type="button"].btn-block {
   flex-direction: column;
   padding-left: 0;
   margin-bottom: 0;
-  list-style: none;
+  list-style: none;  
 }
 
 .navbar-nav .nav-link {
@@ -6073,13 +6077,13 @@ button.close {
 }
 
 .bg-primary {
-  background-color: mediumpurple !important;
+    background-color: #2C3E50 !important;
 }
 
 a.bg-primary:hover, a.bg-primary:focus,
 button.bg-primary:hover,
 button.bg-primary:focus {
-  background-color: mediumpurple !important;
+  background-color: #212529 !important;
 }
 
 .bg-secondary {
@@ -6201,7 +6205,7 @@ button.bg-dark:focus {
 }
 
 .border-primary {
-  border-color: mediumpurple !important;
+    border-color: #2C3E50 !important;
 }
 
 .border-secondary {
