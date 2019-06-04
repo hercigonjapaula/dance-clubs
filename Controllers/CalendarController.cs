@@ -60,37 +60,7 @@ namespace DanceClubs.Controllers
             });
 
             return Json(events.ToArray());            
-        }
-
-        public IActionResult ICal()
-        {
-            var userId = _userManager.GetUserId(User);
-
-            var groupUsers = _repository.GetGroupUsersByUserId(userId);
-            var activities = groupUsers.SelectMany(i => _repository.GetActivitiesByGroupId(i.GroupId)).ToList();
-
-            var calendar = new Calendar();
-
-            foreach(var activity in activities)
-            {
-                calendar.Events.Add(new CalendarEvent
-                {
-                    Class = "PUBLIC",
-                    Created = new CalDateTime(DateTime.Now),
-                    Start = new CalDateTime(activity.Start),
-                    End = new CalDateTime(activity.End),
-                    Sequence = 0,
-                    Uid = Guid.NewGuid().ToString(),
-                    Location = activity.Location
-                });
-            }
-
-            var calendarSerializer = new CalendarSerializer();
-            var ics = calendarSerializer.SerializeToString(calendar);
-            
-
-            return View();
-        }
+        }        
 
     }
 }

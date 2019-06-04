@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +8,9 @@ using DanceClubs.Data;
 using DanceClubs.Data.Models;
 using NETCore.MailKit.Core;
 using Microsoft.AspNetCore.Identity;
+using System.Text;
+using System.IO;
+using DanceClubs.Services;
 
 namespace DanceClubs.Controllers
 {
@@ -18,13 +20,15 @@ namespace DanceClubs.Controllers
         private readonly IRepository _repository;
         private readonly IEmailService _EmailService;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IAppEmailService _appEmailService;
 
-        public ActivitiesController(ApplicationDbContext context, IRepository repository, IEmailService emailService, UserManager<ApplicationUser> userManager)
+        public ActivitiesController(ApplicationDbContext context, IRepository repository, IEmailService emailService, UserManager<ApplicationUser> userManager, IAppEmailService appEmailService)
         {
             _repository = repository;
             _context = context;
             _EmailService = emailService;
             _userManager = userManager;
+            _appEmailService = appEmailService;
         }
 
         // GET: Activities
@@ -72,18 +76,55 @@ namespace DanceClubs.Controllers
         {
             if (ModelState.IsValid)
             {
+                activity.Group = _repository.GetGroupById(activity.GroupId);
+                activity.ActivityType = _repository.GetActivityTypeById(activity.ActivityTypeId);
                 activity.AuthorId = _userManager.GetUserId(User);
-                /*var emailsAddresses = new string[] { "paula.hercigonja@gmail.com" };//activity?.Group?.Members?.Select(m => m?.ApplicationUser?.Email);
-                var message = $"Kreirana je nova aktivnost koja počinje {activity.Start} i završava {activity.End}.";*/
-               
                 _context.Add(activity);
-                await _context.SaveChangesAsync();                
+                await _context.SaveChangesAsync();
+                
+                var mailAddresses = _repository.GetGroupUsersByGroupId(activity.GroupId)
+                    .Select(u => u.ApplicationUser.Email).ToList();
 
-                /*foreach (var addr in emailsAddresses)
+                StringBuilder sb = new StringBuilder();
+                string DateFormat = "yyyyMMddTHHmmssZ";
+                string now = DateTime.Now.ToUniversalTime().ToString(DateFormat);
+                sb.AppendLine("BEGIN:VCALENDAR");
+                sb.AppendLine("PRODID:");
+                sb.AppendLine("VERSION:2.0");
+                sb.AppendLine("METHOD:PUBLISH");                
+                DateTime dtStart = Convert.ToDateTime(activity.Start);
+                DateTime dtEnd = Convert.ToDateTime(activity.End);
+                sb.AppendLine("BEGIN:VEVENT");
+                sb.AppendLine("DTSTART:" + dtStart.ToUniversalTime().ToString(DateFormat));
+                sb.AppendLine("DTEND:" + dtEnd.ToUniversalTime().ToString(DateFormat));
+                sb.AppendLine("DTSTAMP:" + now);
+                sb.AppendLine("UID:" + Guid.NewGuid());
+                sb.AppendLine("CREATED:" + now);
+                sb.AppendLine("DESCRIPTION:" + activity.Group.Name+ " - " + activity.ActivityType.Name);                
+                sb.AppendLine("LAST-MODIFIED:" + now);
+                sb.AppendLine("LOCATION:" + activity.Location);
+                sb.AppendLine("SEQUENCE:0");
+                sb.AppendLine("STATUS:CONFIRMED");
+                sb.AppendLine("SUMMARY:" + activity.Group.Name + " - " + activity.ActivityType.Name);
+                sb.AppendLine("TRANSP:OPAQUE");
+                sb.AppendLine("END:VEVENT");                
+                sb.AppendLine("END:VCALENDAR");
+                var calendarBytes = Encoding.UTF8.GetBytes(sb.ToString());
+                MemoryStream ms = new MemoryStream(calendarBytes);
+
+                foreach(var mail in mailAddresses)
                 {
-                    await _EmailService.SendAsync(addr, "Kreirana je nova aktivnost", message);
-
-                }*/
+                    var emailRequest = new EmailRequest{
+                        ToAddress = mail,
+                        Subject = "Nova aktivnost",
+                        Body = "DanceClubsApp - stvorena nova aktivnost",
+                        Attachment = ms,
+                        FileName = "calendar.ics"
+                    };
+                    await _appEmailService.SendAsync(emailRequest);
+                    return new OkResult();
+                }
+               
                 return RedirectToAction(nameof(Index));
             }
             ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Id", activity.ActivityTypeId);

@@ -13,6 +13,7 @@ using DanceClubs.Data.Models;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
 using System;
+using DanceClubs.Services;
 
 namespace DanceClubs
 {
@@ -45,17 +46,17 @@ namespace DanceClubs
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, IdentityRole>()
-                
-                .AddRoleManager<RoleManager<IdentityRole>>()                
+
+                .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();            
+                .AddDefaultTokenProviders();
 
             services.AddScoped<IRepository, Repository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddMailKit(optionBuilder =>
+            /*services.AddMailKit(optionBuilder =>
             {
                 var x = new MailKitOptions()
                 {
@@ -72,7 +73,39 @@ namespace DanceClubs
                     Security = true
                 };
                 optionBuilder.UseMailKit(x);
-            });
+            });*/
+            services.AddMailKit(optionBuilder =>
+            {
+                var mailKitOptions = new MailKitOptions()
+                {
+                    // get options from secrets.json 
+                    Server = Configuration.GetValue<string>("Email:Server"),
+                    Port = Configuration.GetValue<int>("Email:Port"),
+                    SenderName = Configuration.GetValue<string>("Email:SenderName"),
+                    SenderEmail = Configuration.GetValue<string>("Email:SenderEmail"),
+                    // can be optional with no authentication 
+                    Account = Configuration.GetValue<string>("Email:Account"),
+                    Password = Configuration.GetValue<string>("Email:Password"),
+                    Security = Configuration.GetValue<bool>("Email:Security")
+                };
+                if (mailKitOptions.Server == null)
+                {
+                    throw new InvalidOperationException("Please specify SmtpServer in appsettings");
+                }
+                if (mailKitOptions.Port == 0)
+                {
+                    throw new InvalidOperationException("Please specify Smtp port in appsettings");
+                }
+                if (mailKitOptions.SenderEmail == null)
+                {
+                    throw new InvalidOperationException("Please specify SenderEmail in appsettings");
+                }
+                optionBuilder.UseMailKit(mailKitOptions);
+            });       
+            
+            services.AddScoped<IAppEmailService, AppEmailService>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
