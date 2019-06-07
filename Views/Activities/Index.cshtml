@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<DanceClubs.Data.Models.Activity>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Aktivnosti";
 }
 
 <p>
@@ -11,22 +11,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Start)
+                Početak
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.End)
+                Kraj
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Location)
+                Lokacija
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ActivityType)
+                Vrsta aktivnosti
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Group)
+                Grupa
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Author)
+                Autor
             </th>
             <th></th>
         </tr>
@@ -44,13 +44,13 @@
                 @Html.DisplayFor(modelItem => item.Location)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ActivityType)
+                @Html.DisplayFor(modelItem => item.ActivityType.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Group)
+                @Html.DisplayFor(modelItem => item.Group.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Author)
+                @Html.DisplayFor(modelItem => item.Author.UserName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Uredi</a> |

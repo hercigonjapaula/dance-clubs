@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace DanceClubs.Controllers
 {
@@ -22,13 +24,40 @@ namespace DanceClubs.Controllers
 
         public IActionResult Index()
         {
-            var userId = _userManager.GetUserId(User);
-            var clubs = _repository.GetClubsByOwnerId(userId);
-            Array categoryValues = Enum.GetValues(typeof(Category));
-            Array categoryNames = Enum.GetNames(typeof(Category));
-            ViewData["ClubId"] = new SelectList(clubs, "Id", "Name");
-            ViewData["ReportCategory"] = new SelectList(categoryValues);            
-            return View();
+            var modelList = new List<ReportListingModel>();
+            string[] months = new string[] { "Rujan", "Listopad", "Studeni", "Prosinac" };
+            foreach (var month in months)
+            {
+                modelList.Add(new ReportListingModel
+                {
+                    Month = month,
+                    Quantity = 100
+                });
+            }
+            return View(modelList);
+        }
+
+        /*public IActionResult GetClasses()
+        {
+            
+        }*/
+
+        public JsonResult GetRehearsals()
+        {
+            int[] classes = new int[] { 130, 140, 150, 160, 170, 180, 190, 100, 110, 120, 130, 140 };
+            return Json(classes);            
+        }
+
+        public JsonResult GetPerformances()
+        {
+            int[] classes = new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140 };
+            return Json(classes);           
+        }
+
+        public JsonResult GetMembershipFees()
+        {
+            int[] classes = new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140 };
+            return Json(classes);
         }
     }
 }

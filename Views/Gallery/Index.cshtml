@@ -9,7 +9,7 @@
 
         .column {
             float: left;
-            width: 33.33%;
+            width: 33.33%;            
             padding: 5px;
         }
 
@@ -124,29 +124,30 @@
     </style>    
 </head>
 <body>
-    <div class="row">
+    <div><a class="btn btn-primary" href="/Images/Create" style="float:right;margin:5px;background-color:#2C3E50;">Dodaj sliku</a></div>
+    <div class="row" style="display:inline-block">
         <div id="myModal" class="modal">
             <span class="close" onclick="closeImage()">&times;</span>
-            <img id="modalImage" class="modal-content">            
+            <img id="modalImage" class="modal-content">
         </div>
         @foreach (var image in Model.Images)
-        {            
-            <div class="column">
-                <img id=@image.Url src=@image.Url alt="Image" class="img-fluid zoom" onclick="zoomImage(this.id)">
+        {
+            <div class="column">                
+                <img id=@image.Url src=@image.Url alt="Image" class="img-fluid zoom" onclick="zoomImage(this.id)">                              
                 <h4 class="text-center my-3" style="font-family:Century">@image.GroupName</h4>
                 <h6 class="text-center my-3" style="font-family:Arial">Autor: @image.Author</h6>
                 <h6 class="text-center my-3" style="font-family:Arial;font-size:smaller">Objavljeno: @image.Published</h6>
             </div>
         }
-    </div>  
-    <script>       
+    </div>
+    <script>
         function zoomImage(id) {
             var img = document.getElementById(id)
             var modal = document.getElementById("myModal");
             var modalImg = document.getElementById("modalImage");
             modal.style.display = "block";
             modalImg.src = img.src;
-        }        
+        }
         function closeImage() {
             var modal = document.getElementById("myModal");
             modal.style.display = "none";

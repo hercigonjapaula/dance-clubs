@@ -205,7 +205,8 @@ temporary rendered events).
 /* Scrolling Container
 --------------------------------------------------------------------------------------------------*/
 .fc-scroller {
-  -webkit-overflow-scrolling: touch; }
+  -webkit-overflow-scrolling: touch; 
+}
 
 /* TODO: move to timegrid/daygrid */
 .fc-scroller > .fc-day-grid,
@@ -225,11 +226,13 @@ temporary rendered events).
   font-size: .85em;
   line-height: 1.4;
   border-radius: 3px;
-  border: 1px solid #3788d8; }
+  border: 1px solid;
+  border-color: lightskyblue;
+}
 
 .fc-event,
 .fc-event-dot {
-  background-color: #3788d8;
+  background-color: lightskyblue;
   /* default BACKGROUND color */ }
 
 .fc-event,

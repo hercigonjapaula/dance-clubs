@@ -4,21 +4,19 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Dodaj</h1>
-
-<h4>Član kluba</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6" style="margin:auto">
+        <h2>Novi član kluba</h2>
+        <hr />
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ApplicationUserId" class="control-label">Korisnik</label>
-                <select asp-for="ApplicationUserId" class ="form-control" asp-items="ViewBag.ApplicationUserId"></select>
+                <select asp-for="ApplicationUserId" class="form-control" asp-items="ViewBag.ApplicationUserId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="ClubId" class="control-label">Klub</label>
-                <select asp-for="ClubId" class ="form-control" asp-items="ViewBag.ClubId"></select>
+                <select asp-for="ClubId" class="form-control" asp-items="ViewBag.ClubId"></select>
             </div>
             @*@<div class="form-group">
                 <label asp-for="MemberFrom" class="control-label"></label>
@@ -34,12 +32,12 @@
                 <input type="submit" value="Dodaj" class="btn btn-primary" />
             </div>
         </form>
+        <div style="margin:auto">
+            <a asp-action="Index">Lista članova kluba</a>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Lista članova kluba</a>
-</div>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

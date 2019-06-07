@@ -4,26 +4,24 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Dodaj</h1>
-
-<h4>Član grupe</h4>
-<hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6" style="margin:auto">
+        <h2>Novi član grupe</h2>
+        <hr />
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ApplicationUserId" class="control-label">Korisnik</label>
-                <select asp-for="ApplicationUserId" class ="form-control" asp-items="ViewBag.ApplicationUserId"></select>
+                <select asp-for="ApplicationUserId" class="form-control" asp-items="ViewBag.ApplicationUserId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="GroupId" class="control-label">Grupa</label>
-                <select asp-for="GroupId" class ="form-control" asp-items="ViewBag.GroupId"></select>
+                <select asp-for="GroupId" class="form-control" asp-items="ViewBag.GroupId"></select>
             </div>
             <div class="form-group">
                 <label asp-for="GroupRoleId" class="control-label">Uloga</label>
-                <select asp-for="GroupRoleId" class ="form-control" asp-items="ViewBag.GroupRoleId"></select>
-            </div>            
+                <select asp-for="GroupRoleId" class="form-control" asp-items="ViewBag.GroupRoleId"></select>
+            </div>
             <div class="form-group">
                 <label asp-for="MemberTo" class="control-label">Istek članstva</label>
                 <input asp-for="MemberTo" class="form-control" />
@@ -33,11 +31,10 @@
                 <input type="submit" value="Dodaj" class="btn btn-primary" />
             </div>
         </form>
+        <div style="margin:auto">
+            <a asp-action="Index">Back to List</a>
+        </div>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

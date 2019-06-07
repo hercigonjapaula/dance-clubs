@@ -16,49 +16,58 @@ namespace DanceClubs.Controllers
         private readonly IRepository _repository;
         private static UserManager<ApplicationUser> _userManager;
         private readonly IServiceProvider serviceProvider;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public HomeController(IServiceProvider serviceProvider, IRepository repository, UserManager<ApplicationUser> userManager)
+        public HomeController(IServiceProvider serviceProvider, IRepository repository, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _repository = repository;
             _userManager = userManager;
             this.serviceProvider = serviceProvider;
+            _signInManager = signInManager;
         }
 
         public async Task<IActionResult> Index()
         {
-
-            var userId = _userManager.GetUserId(base.User);
-            var groupUsers = _repository.GetGroupUsersByUserId(userId);
-            var notifications = groupUsers.SelectMany(i => _repository.GetNotificationsByGroupId(i.GroupId)).OrderByDescending(i => i.Published).ToList();
-            var model = new NotificationIndexModel
+            if (_signInManager.IsSignedIn(User))
             {
-                NotificationListingModels = new List<NotificationListingModel>()
-            };
-            foreach (var notif in notifications)
-            {
-                var comments = _repository.GetCommentsByNotificationId(notif.Id);
-                model.NotificationListingModels.Add(new NotificationListingModel
+                var userId = _userManager.GetUserId(base.User);
+                var groupUsers = _repository.GetGroupUsersByUserId(userId);
+                var notifications = groupUsers.SelectMany(i => _repository.GetNotificationsByGroupId(i.GroupId)).OrderByDescending(i => i.Published).ToList();
+                var model = new NotificationIndexModel
                 {
-                    Id = notif.Id,
-                    Author = notif.Author.UserName,
-                    AuthorImage = notif.Author.ProfileImageUrl,
-                    Content = notif.Content,
-                    ImageUrl = notif.ImageUrl,
-                    Published = notif.Published,
-                    ClubName = notif.Group.Club.Name,
-                    GroupName = notif.Group.Name,
-                    CommentListingModels = (comments != null) ? comments.Select(i => new CommentListingModel
+                    NotificationListingModels = new List<NotificationListingModel>()
+                };
+                foreach (var notif in notifications)
+                {
+                    var comments = _repository.GetCommentsByNotificationId(notif.Id);
+                    model.NotificationListingModels.Add(new NotificationListingModel
                     {
-                        Author = i.Author.UserName,
-                        AuthorImage = i.Author.ProfileImageUrl,
-                        Content = i.Content,
-                        Published = i.Published
+                        Id = notif.Id,
+                        Author = notif.Author.UserName,
+                        AuthorImage = notif.Author.ProfileImageUrl,
+                        Content = notif.Content,
+                        ImageUrl = notif.ImageUrl,
+                        Published = notif.Published,
+                        ClubName = notif.Group.Club.Name,
+                        GroupName = notif.Group.Name,
+                        CommentListingModels = (comments != null) ? comments.Select(i => new CommentListingModel
+                        {
+                            Author = i.Author.UserName,
+                            AuthorImage = i.Author.ProfileImageUrl,
+                            Content = i.Content,
+                            Published = i.Published
 
-                    }).ToList() : new List<CommentListingModel>()
-                });
+                        }).ToList() : new List<CommentListingModel>()
+                    });
+                }
+                return View(model);
             }
-            return View(model);
-        }
+            else
+            {
+                return Redirect("/Identity/Account/Login");
+            }
+                   
+        }      
 
         [HttpPost]
         public async Task<IActionResult> CreateComment(string content, int idNotif)

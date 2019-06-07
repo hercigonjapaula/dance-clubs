@@ -32,7 +32,8 @@
                 locale: 'hr',
                 timezone: 'UTC',
                 minTime: "08:00:00",
-                maxTime: "24:00:00"
+                maxTime: "24:00:00",
+                height: "auto"
             });
 
             calendar.render();
@@ -41,7 +42,7 @@
     </script>
 </head>
 <body>
-    <a class="btn btn-primary" href="/Activities/Create" style="float:right;margin:5px;background-color:#2C3E50;">Dodaj aktivnost</a>
+    <a class="btn btn-primary" href="/Activities/Create" style="float:right;margin:5px;margin-top:2px;background-color:#2C3E50;">Dodaj aktivnost</a>
     <div id='calendar' style=""></div>
     <div>
         <a asp-action="DownloadiCal" style="float:right">Preuzmi u iCal formatu</a>

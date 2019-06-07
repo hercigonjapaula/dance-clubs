@@ -121,11 +121,10 @@ namespace DanceClubs.Controllers
                         Attachment = ms,
                         FileName = "calendar.ics"
                     };
-                    await _appEmailService.SendAsync(emailRequest);
-                    return new OkResult();
+                    await _appEmailService.SendAsync(emailRequest);                    
                 }
                
-                return RedirectToAction(nameof(Index));
+                return Redirect("/Calendar");
             }
             ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Id", activity.ActivityTypeId);
             ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id", activity.GroupId);    

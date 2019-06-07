@@ -21,6 +21,7 @@
     "@fullcalendar/daygrid": "^4.1.0",
     "@fullcalendar/list": "^4.1.0",
     "@fullcalendar/timegrid": "^4.1.0",
+    "apexcharts": "^3.7.1",
     "tui-calendar": "^1.12.0"
   },
   "devDependencies": {

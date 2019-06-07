@@ -69,9 +69,9 @@ namespace DanceClubs.Controllers
                 image.Published = DateTime.Now;
                 _context.Add(image);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Redirect("/Gallery/Index");
             }            
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id", image.GroupId);
+            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Name", image.GroupId);
             return View(image);
         }
 
@@ -88,7 +88,7 @@ namespace DanceClubs.Controllers
             {
                 return NotFound();
             }            
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id", image.GroupId);
+            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Name", image.GroupId);
             return View(image);
         }
 
@@ -124,7 +124,7 @@ namespace DanceClubs.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }            
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id", image.GroupId);
+            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Name", image.GroupId);
             return View(image);
         }
 

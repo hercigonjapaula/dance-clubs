@@ -4,38 +4,40 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Dodaj</h1>
-
-<h4>Obavijest</h4>
-<hr />
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Content" class="control-label">Sadržaj</label>
-                <textarea asp-for="Content" class="form-control" rows="5" cols="10"></textarea>
-                <span asp-validation-for="Content" class="text-danger"></span>
+<!DOCTYPE html>
+<html>
+<body>    
+    <div class="row">
+        <div class="col-md-6" style="margin: 0 auto">
+            <h2>Nova obavijest</h2>
+            <hr />
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Content" class="control-label">Sadržaj</label>
+                    <textarea asp-for="Content" class="form-control" rows="5" cols="10"></textarea>
+                    <span asp-validation-for="Content" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="GroupId" class="control-label">Grupa</label>
+                    <select asp-for="GroupId" class="form-control" asp-items="ViewBag.GroupId"></select>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ImageUrl" class="control-label">Url slike</label>
+                    <input asp-for="ImageUrl" class="form-control" />
+                    <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Dodaj" class="btn btn-primary" />
+                </div>
+            </form>
+            <div style="margin:auto">
+                <a asp-action="Index">Lista obavijesti</a>
             </div>
-            <div class="form-group">
-                <label asp-for="GroupId" class="control-label">Grupa</label>
-                <select asp-for="GroupId" class="form-control" asp-items="ViewBag.GroupId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label">Url slike</label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Dodaj" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-<div>
-    <a asp-action="Index">Lista obavijesti</a>
-</div>
+        </div>
+    </div>    
+</body>
+</html>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

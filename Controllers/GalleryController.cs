@@ -27,7 +27,8 @@ namespace DanceClubs.Controllers
             var userId = _userManager.GetUserId(User);
 
             var groupUsers = _repository.GetGroupUsersByUserId(userId);
-            var images = groupUsers.SelectMany(i => _repository.GetImagesByGroupId(i.GroupId)).ToList();
+            var images = groupUsers.SelectMany(i => _repository.GetImagesByGroupId(i.GroupId))
+                .OrderByDescending(i => i.Published).ToList();
             var model = new ImageIndexModel
             {
                 Images = images.Select(i => new ImageListingModel

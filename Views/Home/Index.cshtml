@@ -1,16 +1,15 @@
 ﻿@model DanceClubs.Models.NotificationIndexModel
-
 <div>
-    <a class="btn btn-primary" href="/Notifications/Create" style="float:right;margin-right:90px">Dodaj obavijest</a>
+    <a class="btn btn-primary" href="/Notifications/Create" style="float:right;">Dodaj obavijest</a>
     <br />
     <br />
     @foreach (var notif in Model?.NotificationListingModels ?? new List<NotificationListingModel>())
     {
         <div class="card" style="max-width:60rem;margin:auto;border-radius:25px">
-            <img src="@notif.ImageUrl" class="card-img-top" style="object-fit:cover;max-width:60rem;max-height:10rem;border-radius:25px 25px 0px 0px"/>
+            <img src="@notif.ImageUrl" class="card-img-top" style="object-fit:cover;max-width:60rem;max-height:10rem;border-radius:25px 25px 0px 0px" />
             <div class="card-header" style="border-radius:0px 0px 25px 25px">
-                <img src="@notif.AuthorImage" style="width:6%;height:6%;display:inline-block;border-radius:25px"/>
-                <h5 style="display:inline-block;">@notif.Author</h5>                
+                <img src="@notif.AuthorImage" style="width:6%;height:6%;display:inline-block;border-radius:25px" />
+                <h5 style="display:inline-block;">@notif.Author</h5>
             </div>
             <div class="card-body">
                 <h5>@notif.ClubName : @notif.GroupName</h5>
@@ -60,3 +59,4 @@
 
     }
 </div>
+

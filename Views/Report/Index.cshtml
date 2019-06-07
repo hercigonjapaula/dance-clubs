@@ -1,39 +1,78 @@
-﻿@model ReportModel
-
-
-<h1>Odaberi</h1>
-
-<h4>Izvještaj</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Club" class="control-label">Klub</label>
-                <select asp-for="Club" class="form-control" asp-items="ViewBag.ClubId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateFrom" class="control-label">Od</label>
-                <input asp-for="DateFrom" class="form-control" />
-                <span asp-validation-for="DateFrom" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DateTo" class="control-label">Do</label>
-                <input asp-for="DateTo" class="form-control" />
-                <span asp-validation-for="DateTo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ReportCategory" class="control-label">Kategorija</label>
-                <select asp-for="ReportCategory" class="form-control" asp-items="ViewBag.ReportCategory"></select>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Odaberi" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+﻿@model List<ReportListingModel>
+@{
+    var XLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.Month).ToList());
+    var YValues = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Select(x => x.Quantity).ToList());
 }
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Bar</title>
+</head>
+<body>
+    <div>
+        <a class="btn btn-primary" onclick="statistics()" style="float:right;color:white;margin:5px">Nastupi</a>
+        <a class="btn btn-primary" onclick="statistics()" style="float:right;color:white;margin:5px">Probe</a>
+        <a class="btn btn-primary" onclick="statistics()" style="float:right;color:white;margin:5px">Treninzi</a>
+    </div>   
+    <div class="box-body">
+        <div class="chart-container">
+            <canvas id="chart" style="width:100%; height:500px"></canvas>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+        var chartName = "chart";
+        var ctx = document.getElementById(chartName).getContext('2d');
+        var data = {
+                labels: @Html.Raw(XLabels),
+                datasets: [{
+                    label: "Treninzi",
+                    backgroundColor: 'rgba(200, 0, 150, 0.2)',
+                    borderColor: 'rgba(200, 0, 150, 0.2)',                        
+                    borderWidth: 1,
+                    data: @Html.Raw(YValues)
+                }]
+        };
+
+        var options = {
+                maintainAspectRatio: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: false
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(255,99,164,0.2)"
+                        }
+                }],
+                    xAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                }
+        };
+
+        var myChart = new Chart(ctx, {
+                options: options,
+                data: data,
+                type:'bar'
+
+            });
+        });    
+
+</script>
