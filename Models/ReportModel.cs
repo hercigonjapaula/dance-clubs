@@ -1,16 +1,13 @@
-﻿using DanceClubs.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace DanceClubs.Models
 {
     public class ReportModel
     {
-        public Club Club { get; set; }
-        public DateTime DateFrom { get; set; }
-        public DateTime DateTo { get; set; }
-        public Category ReportCategory { get; set; }
+        public int ClubId { get; set; }
+        public int Year { get; set; }        
+        public List<ClubReportModel> ClubList { get; set; }
+        public List<YearModel> YearList { get; set; }
+        public Dictionary<string, List<ReportListingModel>> Report { get; set; }
     }
 }

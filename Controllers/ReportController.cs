@@ -22,42 +22,79 @@ namespace DanceClubs.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var modelList = new List<ReportListingModel>();
-            string[] months = new string[] { "Rujan", "Listopad", "Studeni", "Prosinac" };
-            foreach (var month in months)
+            var model = await GetFullAndPartialViewModel(_repository.GetOneClubByUserId(_userManager.GetUserId(User)), DateTime.Now.Year);
+            return View(model);
+        }
+
+        public async Task<ActionResult> RefreshChart(int clubId, int year)
+        {
+            var model = await GetFullAndPartialViewModel(clubId, year);
+            return PartialView("Chart", model);
+        }
+
+        private async Task<ReportModel> GetFullAndPartialViewModel(int clubId, int year)
+        {
+            Dictionary<int, string> monthNames = new Dictionary<int, string>
             {
-                modelList.Add(new ReportListingModel
-                {
-                    Month = month,
-                    Quantity = 100
+                { 1, "Siječanj" },
+                { 2, "Veljača" },
+                { 3, "Ožujak" },
+                { 4, "Travanj" },
+                { 5, "Svibanj" },
+                { 6, "Lipanj" },
+                { 7, "Srpanj" },
+                { 8, "Kolovoz" },
+                { 9, "Rujan" },
+                { 10, "Listopad" },
+                { 11, "Studeni" },
+                { 12, "Prosinac" }
+            };
+            var userId = _userManager.GetUserId(User);
+            var clubUsers = _repository.GetClubUsersByUserId(userId);
+            var clubList = new List<ClubReportModel>();
+            var club = _repository.GetClubById(clubId);
+            var report = new Dictionary<string, List<ReportListingModel>>();
+            var activityTypes = _repository.GetAllActivityTypes();
+            int[] months = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+            var years = new List<YearModel>();
+            for (var i = 0; i < 30; i++)
+            {
+                years.Add(new YearModel{
+                    Year = DateTime.Now.AddYears(-i).Year
                 });
             }
-            return View(modelList);
-        }
-
-        /*public IActionResult GetClasses()
-        {
-            
-        }*/
-
-        public JsonResult GetRehearsals()
-        {
-            int[] classes = new int[] { 130, 140, 150, 160, 170, 180, 190, 100, 110, 120, 130, 140 };
-            return Json(classes);            
-        }
-
-        public JsonResult GetPerformances()
-        {
-            int[] classes = new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140 };
-            return Json(classes);           
-        }
-
-        public JsonResult GetMembershipFees()
-        {
-            int[] classes = new int[] { 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140 };
-            return Json(classes);
+            foreach (var clubUser in clubUsers)
+            {
+                clubList.Add(new ClubReportModel
+                {
+                    ClubId = clubUser.ClubId,
+                    ClubName = clubUser.Club.Name
+                });
+            }   
+            foreach(var activityType in activityTypes)
+            {
+                report[activityType.Name] = new List<ReportListingModel>();
+                foreach(var month in months)
+                {
+                    var activities = _repository.GetActivitiesByClubIdActivityTypeIdMonthYear(clubId, activityType.Id, month, year);
+                    report[activityType.Name].Add(new ReportListingModel
+                    {
+                        Month = monthNames[month],
+                        Quantity = activities.Count
+                    });
+                }                    
+            }            
+            var model = new ReportModel
+            {
+                ClubId = clubId,
+                Year = year,
+                ClubList = clubList,
+                Report = report,
+                YearList = years                
+            };
+            return model;
         }
     }
 }
