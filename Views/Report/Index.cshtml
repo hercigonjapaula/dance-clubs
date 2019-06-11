@@ -9,7 +9,7 @@
     <div style="height:55px">
         <label for="clubId"><strong>Klub</strong></label>
         @Html.DropDownListFor(m => m.ClubId, new SelectList(Model.ClubList, "ClubId", "ClubName", Model.ClubId), new { id = "club", @class = "dropdown" })
-        <label for="clubId" style="margin-left:10px"><strong>Godina</strong></label>
+        <label for="clubId" style="margin-left:30px"><strong>Godina</strong></label>
         @Html.DropDownListFor(m => m.Year, new SelectList(Model.YearList, "Year", "Year", Model.Year), new { id = "year", @class = "dropdown" })
     </div>
     <div id="container">        

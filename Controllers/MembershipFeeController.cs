@@ -4,6 +4,7 @@ using DanceClubs.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -42,8 +43,8 @@ namespace DanceClubs.Controllers
                     Club = membershipFee.ClubUser.Club.Name,
                     User = membershipFee.ClubUser.ApplicationUser.UserName,
                     Amount = membershipFee.Amount.ToString(),
-                    Month = membershipFee.Month,
-                    Year = membershipFee.Year,
+                    Month = membershipFee.Month.ToString(),
+                    Year = membershipFee.Year.ToString(),
                     PaymentTime = membershipFee.PaymentTime.Date
                 });
             }
@@ -70,8 +71,8 @@ namespace DanceClubs.Controllers
                     Club = membershipFee.ClubUser.Club.Name,
                     User = membershipFee.ClubUser.ApplicationUser.UserName,
                     Amount = membershipFee.Amount.ToString(),
-                    Month = membershipFee.Month,
-                    Year = membershipFee.Year,
+                    Month = membershipFee.Month.ToString(),
+                    Year = membershipFee.Year.ToString(),
                     PaymentTime = membershipFee.PaymentTime.Date
                 });
             }
@@ -82,6 +83,38 @@ namespace DanceClubs.Controllers
         public IActionResult Create()
 
         {
+            Dictionary<int, string> monthNames = new Dictionary<int, string>
+            {
+                { 1, "Siječanj" },
+                { 2, "Veljača" },
+                { 3, "Ožujak" },
+                { 4, "Travanj" },
+                { 5, "Svibanj" },
+                { 6, "Lipanj" },
+                { 7, "Srpanj" },
+                { 8, "Kolovoz" },
+                { 9, "Rujan" },
+                { 10, "Listopad" },
+                { 11, "Studeni" },
+                { 12, "Prosinac" }
+            };
+            var months = new List<MonthModel>();
+            for (var i = 1; i <= 12; i++)
+            {
+                months.Add(new MonthModel
+                {
+                    MonthValue = i,
+                    MonthName = monthNames[i]
+                });
+            }
+            var years = new List<YearModel>();
+            for (var i = 0; i < 30; i++)
+            {
+                years.Add(new YearModel
+                {
+                    Year = DateTime.Now.AddYears(-i).Year
+                });
+            }
             var userId = _userManager.GetUserId(User);
             var clubOwners = _repository.GetClubOwnersByUserId(userId);            
             var clubUsers = clubOwners.SelectMany(o => _repository.GetClubUsersByClubId(o.ClubId))
@@ -96,7 +129,9 @@ namespace DanceClubs.Controllers
                     Name = user.ApplicationUser.UserName
                 });
             }            
-            ViewData["ClubUserId"] = new SelectList(users, "ClubUserId", "Name");            
+            ViewData["ClubUserId"] = new SelectList(users, "ClubUserId", "Name");
+            ViewData["Month"] = new SelectList(months, "MonthValue", "MonthName");
+            ViewData["Year"] = new SelectList(years, "Year", "Year");
             return View();
         }
 
@@ -128,7 +163,41 @@ namespace DanceClubs.Controllers
                     Name = user.ApplicationUser.UserName
                 });
             }
-            ViewData["ClubUserId"] = new SelectList(users, "ClubUserId", "Name");            
+            Dictionary<int, string> monthNames = new Dictionary<int, string>
+            {
+                { 1, "Siječanj" },
+                { 2, "Veljača" },
+                { 3, "Ožujak" },
+                { 4, "Travanj" },
+                { 5, "Svibanj" },
+                { 6, "Lipanj" },
+                { 7, "Srpanj" },
+                { 8, "Kolovoz" },
+                { 9, "Rujan" },
+                { 10, "Listopad" },
+                { 11, "Studeni" },
+                { 12, "Prosinac" }
+            };
+            var months = new List<MonthModel>();
+            for (var i = 1; i <= 12; i++)
+            {
+                months.Add(new MonthModel
+                {
+                    MonthValue = i,
+                    MonthName = monthNames[i]
+                });
+            }
+            var years = new List<YearModel>();
+            for (var i = 0; i < 30; i++)
+            {
+                years.Add(new YearModel
+                {
+                    Year = DateTime.Now.AddYears(-i).Year
+                });
+            }
+            ViewData["ClubUserId"] = new SelectList(users, "ClubUserId", "Name");
+            ViewData["Month"] = new SelectList(months, "MonthValue", "MonthName");
+            ViewData["Year"] = new SelectList(years, "Year", "Year");
             return View(membershipFee);
         }
 

@@ -85,7 +85,17 @@ namespace DanceClubs.Controllers
                         Quantity = activities.Count
                     });
                 }                    
-            }            
+            }
+            report["Članarine"] = new List<ReportListingModel>();
+            foreach (var month in months)
+            {
+                var membershipFees = _repository.GetMembershipFeesByClubIdMonthYear(clubId, month, year);
+                report["Članarine"].Add(new ReportListingModel
+                {
+                    Month = monthNames[month],
+                    Quantity = membershipFees.Count
+                });
+            }
             var model = new ReportModel
             {
                 ClubId = clubId,
