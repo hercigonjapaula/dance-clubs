@@ -119,3 +119,4 @@ C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\
 C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\MembershipFee\MyClubsFees.g.cshtml.cs
 C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\MembershipFee\Create.g.cshtml.cs
 C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\Report\Chart.g.cshtml.cs
+C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\Activities\Confirm.g.cshtml.cs

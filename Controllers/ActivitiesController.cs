@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Text;
 using System.IO;
 using DanceClubs.Services;
+using DanceClubs.Models;
 
 namespace DanceClubs.Controllers
 {
@@ -21,14 +22,17 @@ namespace DanceClubs.Controllers
         private readonly IEmailService _EmailService;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IAppEmailService _appEmailService;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
-        public ActivitiesController(ApplicationDbContext context, IRepository repository, IEmailService emailService, UserManager<ApplicationUser> userManager, IAppEmailService appEmailService)
+        public ActivitiesController(ApplicationDbContext context, IRepository repository, IEmailService emailService, 
+            UserManager<ApplicationUser> userManager, IAppEmailService appEmailService, SignInManager<ApplicationUser> signInManager)
         {
             _repository = repository;
             _context = context;
             _EmailService = emailService;
             _userManager = userManager;
             _appEmailService = appEmailService;
+            _signInManager = signInManager;
         }
 
         // GET: Activities
@@ -117,7 +121,7 @@ namespace DanceClubs.Controllers
                     var emailRequest = new EmailRequest{
                         ToAddress = mail,
                         Subject = "Nova aktivnost",
-                        Body = "DanceClubsApp - stvorena nova aktivnost",
+                        Body = "Potvrdite dolazak na aktivnost klikom na sljedeći link: " + "https://localhost:44379/Activities/Confirm/" + activity.Id,
                         Attachment = ms,
                         FileName = "calendar.ics"
                     };
@@ -218,6 +222,41 @@ namespace DanceClubs.Controllers
         private bool ActivityExists(int id)
         {
             return _context.Activities.Any(e => e.Id == id);
+        }
+
+        [Route("/Activities/Confirm/{activityid}")]
+        public IActionResult Confirm(int activityid)
+        {
+            if (_signInManager.IsSignedIn(User))
+            {
+                var userId = _userManager.GetUserId(User);
+                var activity = _repository.GetActivityById(activityid);
+                var groupId = activity.GroupId;
+                var groupUser = _repository.GetGroupUserByUserIdGroupId(userId, groupId);
+                _repository.AddUserActivity(new UserActivity
+                {
+                    GroupUserId = groupUser.Id,
+                    ActivityId = activityid,
+                    Activity = activity,
+                    GroupUser = groupUser,
+                    Attendance = true
+                });
+                var model = new ActivityListingModel
+                {
+                    Description = "Potvrdili ste dolazak na aktivnost!",
+                    Group = activity.Group.Name,
+                    ActivityType = activity.ActivityType.Name,
+                    Author = activity.Author.UserName,
+                    Start = activity.Start,
+                    End = activity.End,
+                    Location = activity.Location
+                };
+                return View(model);
+            }
+            else
+            {
+                return Redirect("/Identity/Account/Login");
+            }
         }
     }
 }
