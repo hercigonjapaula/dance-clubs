@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DanceClubs.Data;
 using DanceClubs.Data.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DanceClubs.Controllers
 {
+    [Authorize]
     public class ClubsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -60,7 +62,7 @@ namespace DanceClubs.Controllers
         public async Task<IActionResult> Create([Bind("Id,Name,Address,ClubOwnerId")] Club club)
         {
             if (ModelState.IsValid)
-            {
+            {                
                 _context.Add(club);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

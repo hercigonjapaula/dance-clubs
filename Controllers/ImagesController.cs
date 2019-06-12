@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +7,11 @@ using Microsoft.EntityFrameworkCore;
 using DanceClubs.Data;
 using DanceClubs.Data.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DanceClubs.Controllers
 {
+    [Authorize]
     public class ImagesController : Controller
     {
         private readonly ApplicationDbContext _context;

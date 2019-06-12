@@ -6,11 +6,11 @@ using System.Linq;
 using System;
 using DanceClubs.Models;
 using System.Text;
-using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DanceClubs.Controllers
 {
-    //[Authorize(Roles = "User")]
+    [Authorize]
     public class CalendarController : Controller
     {
         private readonly ApplicationDbContext _context;

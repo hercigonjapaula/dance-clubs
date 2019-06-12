@@ -1,16 +1,16 @@
 ﻿using DanceClubs.Data;
 using DanceClubs.Data.Models;
 using DanceClubs.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DanceClubs.Controllers
 {
-    //[Authorize(Roles = "User")]
+    [Authorize]
     public class ReportController : Controller
     {
         private readonly IRepository _repository;

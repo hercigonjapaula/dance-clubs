@@ -7,9 +7,11 @@ using DanceClubs.Data;
 using DanceClubs.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DanceClubs.Controllers
 {
+    [Authorize]
     public class NotificationsController : Controller
     {
         private readonly ApplicationDbContext _context;

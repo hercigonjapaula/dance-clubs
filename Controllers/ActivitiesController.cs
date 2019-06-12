@@ -12,9 +12,12 @@ using System.Text;
 using System.IO;
 using DanceClubs.Services;
 using DanceClubs.Models;
+using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
 
 namespace DanceClubs.Controllers
 {
+    [Authorize]
     public class ActivitiesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -38,8 +41,9 @@ namespace DanceClubs.Controllers
         // GET: Activities
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Activities.Include(m => m.ActivityType).Include(g => g.Group); 
-            return View(await _context.Activities.ToListAsync());
+            var applicationDbContext = _context.Activities.Include(m => m.ActivityType).Include(g => g.Group).Include(g => g.Author); 
+            return View(await _context.Activities.Include(m => m.ActivityType).Include(g => g.Group)
+                .Include(g => g.Author).OrderByDescending(g => g.Start).OrderByDescending(g => g.End).ToListAsync());
         }
 
         // GET: Activities/Details/5
@@ -52,14 +56,60 @@ namespace DanceClubs.Controllers
 
             var activity = await _context.Activities
                 .Include(g => g.ActivityType)
-                .Include(g => g.Group)                
+                .Include(g => g.Group)
+                .Include(g => g.Author)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (activity == null)
             {
                 return NotFound();
             }
 
-            return View(activity);
+            var groupUsers = _repository.GetGroupUsersByGroupId(activity.GroupId);
+            var users = groupUsers.Select(gu => _repository.GetApplicationUserById(gu.ApplicationUserId));
+
+            var activityUsers = groupUsers.Select(u => _repository.GetUserActivityByGroupUserIdActivityId(u.Id, activity.Id));
+
+            var members = new List<UserActivityDetail>();
+            foreach(var member in groupUsers)
+            {
+                var attendance = "";
+                var activityUser = activityUsers.Where(au => au.GroupUserId == member.Id).First();
+                if (activityUser.AttendanceOnHold)
+                {
+                    attendance = "Na čekanju";
+                }
+                else
+                {
+                    if(activityUser.Attendance)
+                    {
+                        attendance = "Potvrđen";
+                    }
+                    else
+                    {
+                        attendance = "Odbijen";
+                    }                    
+                }
+                members.Add(new UserActivityDetail
+                {
+                    UserName = member.ApplicationUser.UserName,
+                    Name = member.ApplicationUser.FirstName,
+                    Surname = member.ApplicationUser.LastName,
+                    Attendance = attendance
+                });
+            }
+
+            var model = new ActivityDetailModel
+            {
+                ActivityType = activity.ActivityType.Name,
+                Group = activity.Group.Name,
+                Author = activity.Author.UserName,
+                Start = activity.Start,
+                End = activity.End,
+                Location = activity.Location,
+                Members =members
+            };
+
+            return View(model);
         }
 
         // GET: Activities/Create
@@ -121,13 +171,29 @@ namespace DanceClubs.Controllers
                     var emailRequest = new EmailRequest{
                         ToAddress = mail,
                         Subject = "Nova aktivnost",
-                        Body = "Potvrdite dolazak na aktivnost klikom na sljedeći link: " + "https://localhost:44379/Activities/Confirm/" + activity.Id,
+                        Body = "Potvrdite dolazak na aktivnost klikom na link " + "https://localhost:44379/Activities/Confirm/" + activity.Id 
+                        + " ili javite nedolazak klikom na link " + "https://localhost:44379/Activities/Decline/" + activity.Id,
                         Attachment = ms,
                         FileName = "calendar.ics"
                     };
                     await _appEmailService.SendAsync(emailRequest);                    
                 }
-               
+
+                var groupUsers = _repository.GetGroupUsersByGroupId(activity.GroupId);
+
+                foreach(var groupUser in groupUsers)
+                {
+                    await _repository.AddUserActivity(new UserActivity
+                        {
+                            GroupUserId = groupUser.Id,
+                            ActivityId = activity.Id,
+                            Activity = activity,
+                            GroupUser = groupUser,
+                            AttendanceOnHold = true
+                        });
+                }
+                
+
                 return Redirect("/Calendar");
             }
             ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Id", activity.ActivityTypeId);
@@ -226,37 +292,52 @@ namespace DanceClubs.Controllers
 
         [Route("/Activities/Confirm/{activityid}")]
         public IActionResult Confirm(int activityid)
+        {            
+            var userId = _userManager.GetUserId(User);
+            var activity = _repository.GetActivityById(activityid);
+            var groupId = activity.GroupId;
+            var groupUser = _repository.GetGroupUserByUserIdGroupId(userId, groupId);
+            var userActivity = _repository.GetUserActivityByGroupUserIdActivityId(groupUser.Id, activityid);
+
+            _repository.SetAttendanceToTrue(userActivity);
+            _repository.SetAttendanceOnHoldToFalse(userActivity);
+
+            var model = new ActivityListingModel
+            {
+                Description = "Potvrdili ste dolazak na aktivnost!",
+                Group = activity.Group.Name,
+                ActivityType = activity.ActivityType.Name,
+                Author = activity.Author.UserName,
+                Start = activity.Start,
+                End = activity.End,
+                Location = activity.Location
+            };
+            return View(model);           
+        }
+
+        [Route("/Activities/Decline/{activityid}")]
+        public IActionResult Decline(int activityid)
         {
-            if (_signInManager.IsSignedIn(User))
+            var userId = _userManager.GetUserId(User);
+            var activity = _repository.GetActivityById(activityid);
+            var groupId = activity.GroupId;
+            var groupUser = _repository.GetGroupUserByUserIdGroupId(userId, groupId);
+            var userActivity = _repository.GetUserActivityByGroupUserIdActivityId(groupUser.Id, activityid);
+
+            _repository.SetAttendanceToFalse(userActivity);
+            _repository.SetAttendanceOnHoldToFalse(userActivity);
+
+            var model = new ActivityListingModel
             {
-                var userId = _userManager.GetUserId(User);
-                var activity = _repository.GetActivityById(activityid);
-                var groupId = activity.GroupId;
-                var groupUser = _repository.GetGroupUserByUserIdGroupId(userId, groupId);
-                _repository.AddUserActivity(new UserActivity
-                {
-                    GroupUserId = groupUser.Id,
-                    ActivityId = activityid,
-                    Activity = activity,
-                    GroupUser = groupUser,
-                    Attendance = true
-                });
-                var model = new ActivityListingModel
-                {
-                    Description = "Potvrdili ste dolazak na aktivnost!",
-                    Group = activity.Group.Name,
-                    ActivityType = activity.ActivityType.Name,
-                    Author = activity.Author.UserName,
-                    Start = activity.Start,
-                    End = activity.End,
-                    Location = activity.Location
-                };
-                return View(model);
-            }
-            else
-            {
-                return Redirect("/Identity/Account/Login");
-            }
+                Description = "Javili ste nedolazak na aktivnost!",
+                Group = activity.Group.Name,
+                ActivityType = activity.ActivityType.Name,
+                Author = activity.Author.UserName,
+                Start = activity.Start,
+                End = activity.End,
+                Location = activity.Location
+            };
+            return View(model);
         }
     }
 }

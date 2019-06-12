@@ -1,6 +1,7 @@
 ﻿using DanceClubs.Data;
 using DanceClubs.Data.Models;
 using DanceClubs.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DanceClubs.Controllers
 {
-    //[Authorize(Roles = "User,Vlasnik,Developer")]
+    [Authorize]
     public class MembershipFeeController : Controller
     {
         private readonly ApplicationDbContext _context;

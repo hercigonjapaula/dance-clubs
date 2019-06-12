@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DanceClubs.Controllers
 {
-    [Authorize(Roles = "User,Admin,Vlasnik")]
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;

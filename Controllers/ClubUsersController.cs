@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -7,16 +6,23 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using DanceClubs.Data;
 using DanceClubs.Data.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace DanceClubs.Controllers
 {
+    [Authorize]
     public class ClubUsersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IRepository _repository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public ClubUsersController(ApplicationDbContext context)
+        public ClubUsersController(ApplicationDbContext context, IRepository repository, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _repository = repository;
+            _userManager = userManager;
         }
 
         // GET: ClubUsers
@@ -49,8 +55,9 @@ namespace DanceClubs.Controllers
         // GET: ClubUsers/Create
         public IActionResult Create()
         {
+            var clubs = _repository.GetClubsByOwnerId(_userManager.GetUserId(User));
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "UserName");
-            ViewData["ClubId"] = new SelectList(_context.Clubs, "Id", "Name");
+            ViewData["ClubId"] = new SelectList(clubs, "Id", "Name");
             return View();
         }
 

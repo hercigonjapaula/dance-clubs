@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace DanceClubs.Controllers
 {
-    //[Authorize(Roles = "User")]
+    [Authorize]
     public class ClubController: Controller
     {
         private readonly IRepository _repository;

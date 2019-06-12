@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace DanceClubs.Controllers
 {
-    //[Authorize(Roles = "User")]
+    [Authorize]
     public class GalleryController : Controller
     {
         private readonly ApplicationDbContext _context;
