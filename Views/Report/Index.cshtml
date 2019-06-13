@@ -10,7 +10,8 @@
         <label for="clubId"><strong>Klub</strong></label>
         @Html.DropDownListFor(m => m.ClubId, new SelectList(Model.ClubList, "ClubId", "ClubName", Model.ClubId), new { id = "club", @class = "dropdown" })
         <label for="clubId" style="margin-left:30px"><strong>Godina</strong></label>
-        @Html.DropDownListFor(m => m.Year, new SelectList(Model.YearList, "Year", "Year", Model.Year), new { id = "year", @class = "dropdown" })
+        @Html.DropDownListFor(m => m.Year, new SelectList(Model.YearList, "Year", "Year", Model.Year), new { id = "year", @class = "dropdown" })        
+        <a class="btn btn-primary" href="/Report/AllClubs" style="float:right; margin:5px; display:inline-block">Top 5 klubova</a>
     </div>
     <div id="container">        
         <br /><br />

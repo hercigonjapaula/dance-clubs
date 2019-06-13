@@ -1,0 +1,36 @@
+﻿@model ReportAdminModel
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Bar</title>
+</head>
+<body>
+    <div style="height:55px">
+        <label for="clubId" style="margin-left:30px"><strong>Godina</strong></label>
+        @Html.DropDownListFor(m => m.Year, new SelectList(Model.YearList, "Year", "Year", Model.Year), new { id = "year", @class = "dropdown" })        
+        <a class="btn btn-primary" href="/Report/" style="float:right; margin:5px; display:inline-block">Moji klubovi</a>
+    </div>
+    <div id="container">
+        <br /><br />
+        <div id="ChartResult">
+            @{await Html.RenderPartialAsync("ChartAdmin", Model);}
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+    var sheet = document.createElement('style');
+    sheet.innerHTML = ".dropdown {width: 15%; height: 50%; display: inline-block; border-radius:5px}";
+    document.body.appendChild(sheet);
+    $(document).ready(function () {  
+        $("#year").change(function () {          
+            var year = $("#year").val();
+            $("#ChartResult").load('@(Url.Action("RefreshChartAdmin","Report", null, Context.Request.Scheme))?year=' + year);
+        });
+    });
+</script>

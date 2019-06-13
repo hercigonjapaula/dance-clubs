@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace DanceClubs.Controllers
@@ -15,11 +16,13 @@ namespace DanceClubs.Controllers
     {
         private readonly IRepository _repository;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public ReportController(IRepository repository, UserManager<ApplicationUser> userManager)
+        public ReportController(IRepository repository, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             _repository = repository;
             _userManager = userManager;
+            _context = context;
         }
 
         public async Task<ActionResult> Index()
@@ -32,6 +35,19 @@ namespace DanceClubs.Controllers
         {
             var model = await GetFullAndPartialViewModel(clubId, year);
             return PartialView("Chart", model);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> AllClubs()
+        {
+            var model = await GetFullAndPartialViewModelAdmin(DateTime.Now.Year);
+            return View(model);
+        }
+
+        public async Task<ActionResult> RefreshChartAdmin(int year)
+        {
+            var model = await GetFullAndPartialViewModelAdmin(year);
+            return PartialView("ChartAdmin", model);
         }
 
         private async Task<ReportModel> GetFullAndPartialViewModel(int clubId, int year)
@@ -103,6 +119,57 @@ namespace DanceClubs.Controllers
                 ClubList = clubList,
                 Report = report,
                 YearList = years                
+            };
+            return model;
+        }
+
+        private async Task<ReportAdminModel> GetFullAndPartialViewModelAdmin(int year)
+        {
+            Dictionary<int, string> monthNames = new Dictionary<int, string>
+            {
+                { 1, "Siječanj" },
+                { 2, "Veljača" },
+                { 3, "Ožujak" },
+                { 4, "Travanj" },
+                { 5, "Svibanj" },
+                { 6, "Lipanj" },
+                { 7, "Srpanj" },
+                { 8, "Kolovoz" },
+                { 9, "Rujan" },
+                { 10, "Listopad" },
+                { 11, "Studeni" },
+                { 12, "Prosinac" }
+            };
+            var allClubs = _repository.GetAllClubs();
+            var clubs = allClubs.OrderByDescending(c => _repository.GetActivitiesByClubId(c.Id).Count).ToList().GetRange(0, 5);
+            var report = new Dictionary<string, List<ReportListingModel>>();            
+            int[] months = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+            var years = new List<YearModel>();
+            for (var i = 0; i < 30; i++)
+            {
+                years.Add(new YearModel
+                {
+                    Year = DateTime.Now.AddYears(-i).Year
+                });
+            }
+            foreach(var club in clubs)
+            {
+                report[club.Name] = new List<ReportListingModel>();
+                foreach (var month in months)
+                {                    
+                    var activities = _repository.GetActivitiesByClubIdMonthYear(club.Id, month, year);
+                    report[club.Name].Add(new ReportListingModel
+                    {
+                        Month = monthNames[month],
+                        Quantity = activities.Count
+                    });
+                }
+            }                    
+            var model = new ReportAdminModel
+            {
+                Report = report,
+                Year = year,
+                YearList =years
             };
             return model;
         }

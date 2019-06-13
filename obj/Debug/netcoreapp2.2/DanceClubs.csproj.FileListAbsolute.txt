@@ -121,3 +121,5 @@ C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\
 C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\Report\Chart.g.cshtml.cs
 C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\Activities\Confirm.g.cshtml.cs
 C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\Activities\Decline.g.cshtml.cs
+C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\Report\AllClubs.g.cshtml.cs
+C:\Users\Paula\source\repos\DanceClubs\DanceClubs\obj\Debug\netcoreapp2.2\Razor\Views\Report\ChartAdmin.g.cshtml.cs

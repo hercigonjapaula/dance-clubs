@@ -1,0 +1,115 @@
+﻿@model ReportAdminModel
+
+@{
+    var clubs = Model.Report.Keys.ToArray();
+
+    var club = clubs[0];
+    var XLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Report[club].Select(x => x.Month).ToList());
+    var YValuesClub1 = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Report[club].Select(x => x.Quantity).ToList());
+    var Club1 = Newtonsoft.Json.JsonConvert.SerializeObject(club);
+
+    club = clubs[1];
+    var YValuesClub2 = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Report[club].Select(x => x.Quantity).ToList());
+    var Club2 = Newtonsoft.Json.JsonConvert.SerializeObject(club);
+
+    club = clubs[2];
+    var YValuesClub3 = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Report[club].Select(x => x.Quantity).ToList());
+    var Club3 = Newtonsoft.Json.JsonConvert.SerializeObject(club);
+
+    club = clubs[3];
+    var YValuesClub4 = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Report[club].Select(x => x.Quantity).ToList());
+    var Club4 = Newtonsoft.Json.JsonConvert.SerializeObject(club);
+
+    club = clubs[4];
+    var YValuesClub5 = Newtonsoft.Json.JsonConvert.SerializeObject(Model.Report[club].Select(x => x.Quantity).ToList());
+    var Club5 = Newtonsoft.Json.JsonConvert.SerializeObject(club);
+}
+
+<div class="box-body">
+    <div class="chart-container">
+        <canvas id="chart" style="width:100%; height:500px"></canvas>
+    </div>
+</div>
+<br />
+<br />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+        var chartName = "chart";
+        var ctx = document.getElementById(chartName).getContext('2d');
+        var data = {
+            labels: @Html.Raw(XLabels),
+                datasets: [{
+                    label: @Html.Raw(Club1),
+                    backgroundColor: 'rgba(0, 0, 200, 0.3)',
+                    borderColor: 'rgba(0, 0, 200, 0.3)',
+                    borderWidth: 1,
+                    data: @Html.Raw(YValuesClub1)
+                },
+                {
+                    label: @Html.Raw(Club2),
+                    backgroundColor: 'rgba(200, 0, 150, 0.3)',
+                    borderColor: 'rgba(200, 0, 150, 0.3)',
+                    borderWidth: 1,
+                    data: @Html.Raw(YValuesClub2)
+                },
+                {
+                    label: @Html.Raw(Club3),
+                    backgroundColor: 'rgba(76, 175, 80, 0.3)',
+                    borderColor: 'rgba(76, 175, 80, 0.3)',
+                    borderWidth: 1,
+                    data: @Html.Raw(YValuesClub3)
+                },
+                {
+                    label: @Html.Raw(Club4),
+                    backgroundColor: 'rgba(255, 131, 0, 0.3)',
+                    borderColor: 'rgba(255, 131, 0, 0.3)',
+                    borderWidth: 1,
+                    data: @Html.Raw(YValuesClub4)
+                },
+                {
+                    label: @Html.Raw(Club5),
+                    backgroundColor: 'rgba(249, 215, 28, 0.3)',
+                    borderColor: 'rgba(249, 215, 28, 0.3)',
+                    borderWidth: 1,
+                    data: @Html.Raw(YValuesClub5)
+                }]
+        };
+
+        var options = {
+                maintainAspectRatio: true,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: false
+                        },
+                        gridLines: {
+                            display: true,
+                            color: "rgba(255,99,164,0.2)"
+                        }
+                }],
+                    xAxes: [{
+                        ticks: {
+                            min: 0,
+                            beginAtZero: true
+                        },
+                        gridLines: {
+                            display: false
+                        }
+                    }]
+                }
+        };
+
+        var myChart = new Chart(ctx, {
+                options: options,
+                data: data,
+                type:'bar'
+
+            });
+    });
+</script>
