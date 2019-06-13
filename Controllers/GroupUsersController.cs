@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using DanceClubs.Data;
 using DanceClubs.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace DanceClubs.Controllers
 {
@@ -14,10 +15,14 @@ namespace DanceClubs.Controllers
     public class GroupUsersController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IRepository _repository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GroupUsersController(ApplicationDbContext context)
+        public GroupUsersController(ApplicationDbContext context, IRepository repository, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _repository = repository;
+            _userManager = userManager;
         }
 
         // GET: GroupUsers
@@ -51,8 +56,14 @@ namespace DanceClubs.Controllers
         // GET: GroupUsers/Create
         public IActionResult Create()
         {
+            var userId = _userManager.GetUserId(User);
+            var clubOwners = _repository.GetClubOwnersByUserId(userId);
+            var clubs = clubOwners.Select(o => o.Club);
+            var groups = _repository.GetGroupsByDanceTeacherId(userId);
+            clubs.Union(groups.Select(g => g.Club));
+            groups.Union(clubs.SelectMany(c => _repository.GetGroupsByClubId(c.Id)));
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "UserName");
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Name");
+            ViewData["GroupId"] = new SelectList(groups, "Id", "Name");
             ViewData["GroupRoleId"] = new SelectList(_context.GroupRoles, "Id", "Name");
             return View();
         }

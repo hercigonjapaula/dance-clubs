@@ -15,10 +15,12 @@ namespace DanceClubs.Controllers
     public class ClubsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IRepository _repository;
 
-        public ClubsController(ApplicationDbContext context)
+        public ClubsController(ApplicationDbContext context, IRepository repository)
         {
             _context = context;
+            _repository = repository;
         }
 
         // GET: Clubs
@@ -62,7 +64,16 @@ namespace DanceClubs.Controllers
         public async Task<IActionResult> Create([Bind("Id,Name,Address,ClubOwnerId")] Club club)
         {
             if (ModelState.IsValid)
-            {                
+            {
+                var owner = _repository.GetApplicationUserById(club.ClubOwnerId);
+                _context.Add(new ClubOwner
+                {
+                    Club = club,
+                    ClubId = club.Id,
+                    Owner = owner,
+                    OwnerId = owner.Id
+                });
+                _context.Add(owner);
                 _context.Add(club);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

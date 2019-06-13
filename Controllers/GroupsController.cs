@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using DanceClubs.Data;
 using DanceClubs.Data.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace DanceClubs.Controllers
 {
@@ -13,10 +14,14 @@ namespace DanceClubs.Controllers
     public class GroupsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IRepository _repository;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GroupsController(ApplicationDbContext context)
+        public GroupsController(ApplicationDbContext context, IRepository repository, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _repository = repository;
+            _userManager = userManager;
         }
 
         // GET: Groups
@@ -50,8 +55,11 @@ namespace DanceClubs.Controllers
         // GET: Groups/Create
         public IActionResult Create()
         {
+            var userId = _userManager.GetUserId(User);
+            var clubOwners = _repository.GetClubOwnersByUserId(userId);
+            var clubs = clubOwners.Select(o => o.Club);
             ViewData["AgeGroupId"] = new SelectList(_context.AgeGroups, "Id", "Name");
-            ViewData["ClubId"] = new SelectList(_context.Clubs, "Id", "Name");
+            ViewData["ClubId"] = new SelectList(clubs, "Id", "Name");
             ViewData["DanceStyleId"] = new SelectList(_context.DanceStyles, "Id", "Name");
             return View();
         }
@@ -65,12 +73,18 @@ namespace DanceClubs.Controllers
         {
             if (ModelState.IsValid)
             {
+                ggroup.Club = _repository.GetClubById(ggroup.ClubId);
+                ggroup.AgeGroup = _repository.GetAgeGroupById(ggroup.AgeGroupId);
+                ggroup.DanceStyle = _repository.GetDanceStyleById(ggroup.DanceStyleId);
                 _context.Add(ggroup);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            var userId = _userManager.GetUserId(User);
+            var clubOwners = _repository.GetClubOwnersByUserId(userId);
+            var clubs = clubOwners.Select(o => o.Club);
             ViewData["AgeGroupId"] = new SelectList(_context.AgeGroups, "Id", "Id", ggroup.AgeGroupId);
-            ViewData["ClubId"] = new SelectList(_context.Clubs, "Id", "Id", ggroup.ClubId);
+            ViewData["ClubId"] = new SelectList(clubs, "Id", "Id", ggroup.ClubId);
             ViewData["DanceStyleId"] = new SelectList(_context.DanceStyles, "Id", "Id", ggroup.DanceStyleId);
             return View(ggroup);
         }
@@ -88,8 +102,11 @@ namespace DanceClubs.Controllers
             {
                 return NotFound();
             }
+            var userId = _userManager.GetUserId(User);
+            var clubOwners = _repository.GetClubOwnersByUserId(userId);
+            var clubs = clubOwners.Select(o => o.Club);
             ViewData["AgeGroupId"] = new SelectList(_context.AgeGroups, "Id", "Id", ggroup.AgeGroupId);
-            ViewData["ClubId"] = new SelectList(_context.Clubs, "Id", "Id", ggroup.ClubId);
+            ViewData["ClubId"] = new SelectList(clubs, "Id", "Id", ggroup.ClubId);
             ViewData["DanceStyleId"] = new SelectList(_context.DanceStyles, "Id", "Id", ggroup.DanceStyleId);
             return View(ggroup);
         }
@@ -126,8 +143,11 @@ namespace DanceClubs.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            var userId = _userManager.GetUserId(User);
+            var clubOwners = _repository.GetClubOwnersByUserId(userId);
+            var clubs = clubOwners.Select(o => o.Club);
             ViewData["AgeGroupId"] = new SelectList(_context.AgeGroups, "Id", "Id", ggroup.AgeGroupId);
-            ViewData["ClubId"] = new SelectList(_context.Clubs, "Id", "Id", ggroup.ClubId);
+            ViewData["ClubId"] = new SelectList(clubs, "Id", "Id", ggroup.ClubId);
             ViewData["DanceStyleId"] = new SelectList(_context.DanceStyles, "Id", "Id", ggroup.DanceStyleId);
             return View(ggroup);
         }

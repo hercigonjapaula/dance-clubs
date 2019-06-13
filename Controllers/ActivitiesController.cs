@@ -116,8 +116,9 @@ namespace DanceClubs.Controllers
         public IActionResult Create()
 
         {
+            var groups = _repository.GetGroupsByDanceTeacherId(_userManager.GetUserId(User));
             ViewData["ActivityTypeId"] = new SelectList(_context.ActivityTypes, "Id", "Name");
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Name");       
+            ViewData["GroupId"] = new SelectList(groups, "Id", "Name");       
             return View();           
         }
 
@@ -299,8 +300,7 @@ namespace DanceClubs.Controllers
             var groupUser = _repository.GetGroupUserByUserIdGroupId(userId, groupId);
             var userActivity = _repository.GetUserActivityByGroupUserIdActivityId(groupUser.Id, activityid);
 
-            _repository.SetAttendanceToTrue(userActivity);
-            _repository.SetAttendanceOnHoldToFalse(userActivity);
+            _repository.SetAttendanceToTrue(userActivity);           
 
             var model = new ActivityListingModel
             {
@@ -324,8 +324,7 @@ namespace DanceClubs.Controllers
             var groupUser = _repository.GetGroupUserByUserIdGroupId(userId, groupId);
             var userActivity = _repository.GetUserActivityByGroupUserIdActivityId(groupUser.Id, activityid);
 
-            _repository.SetAttendanceToFalse(userActivity);
-            _repository.SetAttendanceOnHoldToFalse(userActivity);
+            _repository.SetAttendanceToFalse(userActivity);          
 
             var model = new ActivityListingModel
             {

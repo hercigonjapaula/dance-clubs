@@ -16,11 +16,13 @@ namespace DanceClubs.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IRepository _repository;
 
-        public ImagesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public ImagesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IRepository repository)
         {
             _context = context;
             _userManager = userManager;
+            _repository = repository;
         }
 
         // GET: Images
@@ -52,8 +54,9 @@ namespace DanceClubs.Controllers
 
         // GET: Images/Create
         public IActionResult Create()
-        {            
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Name");
+        {
+            var groups = _repository.GetGroupsByDanceTeacherId(_userManager.GetUserId(User));
+            ViewData["GroupId"] = new SelectList(groups, "Id", "Name");
             return View();
         }
 
@@ -66,6 +69,7 @@ namespace DanceClubs.Controllers
         {
             if (ModelState.IsValid)
             {
+                image.Group = _repository.GetGroupById(image.GroupId);
                 image.AuthorId = _userManager.GetUserId(User);
                 image.Published = DateTime.Now;
                 _context.Add(image);

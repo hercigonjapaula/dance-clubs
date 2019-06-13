@@ -16,11 +16,13 @@ namespace DanceClubs.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IRepository _repository;
 
-        public NotificationsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public NotificationsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager, IRepository repository)
         {
             _context = context;
             _userManager = userManager;
+            _repository = repository;
         }
 
         // GET: Notifications
@@ -52,8 +54,9 @@ namespace DanceClubs.Controllers
 
         // GET: Notifications/Create
         public IActionResult Create()
-        {          
-            ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Name");
+        {
+            var groups = _repository.GetGroupsByDanceTeacherId(_userManager.GetUserId(User));
+            ViewData["GroupId"] = new SelectList(groups, "Id", "Name");
             return View();
         }
 
@@ -67,7 +70,9 @@ namespace DanceClubs.Controllers
 
             if (ModelState.IsValid)
             {
+                notification.Group = _repository.GetGroupById(notification.GroupId);
                 notification.AuthorId = _userManager.GetUserId(User);
+                notification.Author = _repository.GetApplicationUserById(notification.AuthorId);
                 notification.Published = DateTime.Now;
                 _context.Add(notification);
                 await _context.SaveChangesAsync();
