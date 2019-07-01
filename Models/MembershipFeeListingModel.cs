@@ -12,6 +12,6 @@ namespace DanceClubs.Models
         public string Amount { get; set; }
         public string Month { get; set; }
         public string Year { get; set; }
-        public DateTime PaymentTime { get; set; }
+        public String PaymentTime { get; set; }
     }
 }

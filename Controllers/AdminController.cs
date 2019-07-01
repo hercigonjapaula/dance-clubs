@@ -24,7 +24,7 @@ namespace DanceClubs.Controllers
 
         public IActionResult Index()
         {
-            var clubs = _repository.GetAllClubs()
+            var clubs = _repository.GetAllClubs().OrderBy(c => c.Name)
                 .Select(club => new ClubListingModel
                 {
                     Id = club.Id,

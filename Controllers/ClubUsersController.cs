@@ -73,7 +73,7 @@ namespace DanceClubs.Controllers
                 clubUser.MemberFrom = DateTime.Now;
                 _context.Add(clubUser);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Redirect("/Club");
             }
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", clubUser.ApplicationUserId);
             ViewData["ClubId"] = new SelectList(_context.Clubs, "Id", "Id", clubUser.ClubId);

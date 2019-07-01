@@ -72,11 +72,10 @@ namespace DanceClubs.Controllers
                     ClubId = club.Id,
                     Owner = owner,
                     OwnerId = owner.Id
-                });
-                _context.Add(owner);
+                });                
                 _context.Add(club);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Redirect("/Admin/Index");
             }
             ViewData["ClubOwnerId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", club.ClubOwnerId);
             return View(club);

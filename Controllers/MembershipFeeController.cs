@@ -28,6 +28,21 @@ namespace DanceClubs.Controllers
 
         public IActionResult Index()
         {
+            Dictionary<int, string> monthNames = new Dictionary<int, string>
+            {
+                { 1, "Siječanj" },
+                { 2, "Veljača" },
+                { 3, "Ožujak" },
+                { 4, "Travanj" },
+                { 5, "Svibanj" },
+                { 6, "Lipanj" },
+                { 7, "Srpanj" },
+                { 8, "Kolovoz" },
+                { 9, "Rujan" },
+                { 10, "Listopad" },
+                { 11, "Studeni" },
+                { 12, "Prosinac" }
+            };
             var userId = _userManager.GetUserId(User);
             var clubUsers = _repository.GetClubUsersByUserId(userId);
             var membershipFees = clubUsers.SelectMany(u => _repository.GetMembershipFeesByClubUserId(u.Id))
@@ -44,9 +59,9 @@ namespace DanceClubs.Controllers
                     Club = membershipFee.ClubUser.Club.Name,
                     User = membershipFee.ClubUser.ApplicationUser.UserName,
                     Amount = membershipFee.Amount.ToString(),
-                    Month = membershipFee.Month.ToString(),
+                    Month = monthNames[membershipFee.Month],
                     Year = membershipFee.Year.ToString(),
-                    PaymentTime = membershipFee.PaymentTime.Date
+                    PaymentTime = membershipFee.PaymentTime.ToShortDateString()
                 });
             }
             return View(model);
@@ -54,13 +69,28 @@ namespace DanceClubs.Controllers
 
         public IActionResult MyClubsFees()
         {
+            Dictionary<int, string> monthNames = new Dictionary<int, string>
+            {
+                { 1, "Siječanj" },
+                { 2, "Veljača" },
+                { 3, "Ožujak" },
+                { 4, "Travanj" },
+                { 5, "Svibanj" },
+                { 6, "Lipanj" },
+                { 7, "Srpanj" },
+                { 8, "Kolovoz" },
+                { 9, "Rujan" },
+                { 10, "Listopad" },
+                { 11, "Studeni" },
+                { 12, "Prosinac" }
+            };
             var userId = _userManager.GetUserId(User);
             var clubOwners = _repository.GetClubOwnersByUserId(userId);
             var clubUsers = clubOwners.SelectMany(o => _repository.GetClubUsersByClubId(o.ClubId))
                 .OrderBy(u => u.Club.Name).ThenBy(u => u.ApplicationUser.UserName).ToList();
             var membershipFees = clubUsers.SelectMany(u => _repository.GetMembershipFeesByClubUserId(u.Id))
-                .OrderBy(m => m.ClubUser.Club.Name).ThenBy(m => m.ClubUser.ApplicationUser.UserName)
-                .ThenByDescending(m => m.Year).ThenByDescending(m => m.Month).ToList();
+                .OrderByDescending(m => m.Year).ThenByDescending(m => m.Month)
+                .ThenBy(m => m.ClubUser.Club.Name).ThenBy(m => m.ClubUser.ApplicationUser.UserName).ToList();            
             var model = new MembershipFeeIndexModel
             {
                 MembershipFees = new List<MembershipFeeListingModel>()
@@ -72,9 +102,9 @@ namespace DanceClubs.Controllers
                     Club = membershipFee.ClubUser.Club.Name,
                     User = membershipFee.ClubUser.ApplicationUser.UserName,
                     Amount = membershipFee.Amount.ToString(),
-                    Month = membershipFee.Month.ToString(),
+                    Month = monthNames[membershipFee.Month],
                     Year = membershipFee.Year.ToString(),
-                    PaymentTime = membershipFee.PaymentTime.Date
+                    PaymentTime = membershipFee.PaymentTime.Date.ToShortDateString()
                 });
             }
             return View(model);
@@ -136,7 +166,7 @@ namespace DanceClubs.Controllers
             return View();
         }
 
-        // POST: Activities/Create
+        // POST: MembershipFee/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]

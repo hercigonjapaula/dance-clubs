@@ -78,7 +78,7 @@ namespace DanceClubs.Controllers
                 ggroup.DanceStyle = _repository.GetDanceStyleById(ggroup.DanceStyleId);
                 _context.Add(ggroup);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Redirect("/Club");
             }
             var userId = _userManager.GetUserId(User);
             var clubOwners = _repository.GetClubOwnersByUserId(userId);

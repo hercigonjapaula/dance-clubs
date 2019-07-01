@@ -139,6 +139,7 @@ namespace DanceClubs.Controllers
                 
                 var mailAddresses = _repository.GetGroupUsersByGroupId(activity.GroupId)
                     .Select(u => u.ApplicationUser.Email).ToList();
+                var author = _repository.GetApplicationUserById(activity.AuthorId);
 
                 StringBuilder sb = new StringBuilder();
                 string DateFormat = "yyyyMMddTHHmmssZ";
@@ -150,6 +151,7 @@ namespace DanceClubs.Controllers
                 DateTime dtStart = Convert.ToDateTime(activity.Start);
                 DateTime dtEnd = Convert.ToDateTime(activity.End);
                 sb.AppendLine("BEGIN:VEVENT");
+                sb.AppendLine("ORGANIZER;CN=" + author.FirstName + " " + author.LastName + ":MAILTO:" + author.Email);
                 sb.AppendLine("DTSTART:" + dtStart.ToUniversalTime().ToString(DateFormat));
                 sb.AppendLine("DTEND:" + dtEnd.ToUniversalTime().ToString(DateFormat));
                 sb.AppendLine("DTSTAMP:" + now);

@@ -6,7 +6,9 @@
 
 <div>
     <h5>@Model.Group: @Model.ActivityType</h5>
-    <h6>@Model.Start - @Model.End</h6>
+    <h6>@Model.Start.ToShortTimeString() - @Model.End.ToShortTimeString()</h6>
+    <h6>@Model.Start.ToShortDateString()</h6>
+    <h6>@Model.Location</h6>
 </div>
 
 <table class="table">

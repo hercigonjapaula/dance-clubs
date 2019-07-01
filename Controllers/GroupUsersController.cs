@@ -59,11 +59,10 @@ namespace DanceClubs.Controllers
             var userId = _userManager.GetUserId(User);
             var clubOwners = _repository.GetClubOwnersByUserId(userId);
             var clubs = clubOwners.Select(o => o.Club);
-            var groups = _repository.GetGroupsByDanceTeacherId(userId);
-            clubs.Union(groups.Select(g => g.Club));
-            groups.Union(clubs.SelectMany(c => _repository.GetGroupsByClubId(c.Id)));
+            var groups = _repository.GetGroupsByDanceTeacherId(userId);           
+            var allGroups = groups.Union(clubs.SelectMany(c => _repository.GetGroupsByClubId(c.Id)));
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "UserName");
-            ViewData["GroupId"] = new SelectList(groups, "Id", "Name");
+            ViewData["GroupId"] = new SelectList(allGroups, "Id", "Name");
             ViewData["GroupRoleId"] = new SelectList(_context.GroupRoles, "Id", "Name");
             return View();
         }
@@ -80,7 +79,7 @@ namespace DanceClubs.Controllers
                 groupUser.MemberFrom = DateTime.Now;
                 _context.Add(groupUser);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Redirect("/Club");
             }
             ViewData["ApplicationUserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", groupUser.ApplicationUserId);
             ViewData["GroupId"] = new SelectList(_context.Groups, "Id", "Id", groupUser.GroupId);

@@ -37,11 +37,11 @@ namespace DanceClubs.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
+            [Required(ErrorMessage ="Potreban je unos emaila.")]
+            [EmailAddress(ErrorMessage = "Format unesene email adrese nije valjan.")]
             public string Email { get; set; }
 
-            [Required]
+            [Required(ErrorMessage = "Potreban je unos lozinke.")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 

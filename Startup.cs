@@ -45,35 +45,18 @@ namespace DanceClubs
             services.AddDbContext<Data.ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<IRepository, Repository>();
+
             services.AddIdentity<ApplicationUser, IdentityRole>()
 
                 .AddRoleManager<RoleManager<IdentityRole>>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddScoped<IRepository, Repository>();
+                .AddDefaultTokenProviders();           
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
-            /*services.AddMailKit(optionBuilder =>
-            {
-                var x = new MailKitOptions()
-                {
-                    //get options from sercets.json
-                    Server = Configuration["Server"],
-                    Port = Convert.ToInt32(Configuration["Port"]),
-                    SenderName = Configuration["SenderName"],
-                    SenderEmail = Configuration["SenderEmail"],
-
-                    // can be optional with no authentication 
-                    Account = Configuration["Account"],
-                    Password = Configuration["Password"],
-                    // enable ssl or tls
-                    Security = true
-                };
-                optionBuilder.UseMailKit(x);
-            });*/
+          
             services.AddMailKit(optionBuilder =>
             {
                 var mailKitOptions = new MailKitOptions()
